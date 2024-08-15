@@ -74,7 +74,7 @@ document.getElementById("registrationForm").addEventListener("submit", function(
                     // Perform form submission via AJAX or redirect directly
                     // Simulate form submission
                     // Redirect to another page
-                    window.location.replace("../dashboard.html"); // Replace with your actual redirect URL
+                    window.location.replace("dashboard.html"); // Replace with your actual redirect URL
                 }
             });
 });
@@ -93,7 +93,7 @@ document.getElementById("registrationForm").addEventListener("submit", function(
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Redirect to another page and replace current entry in history
-                    window.location.replace("../dashboard.html"); // Replace with your actual redirect URL
+                    window.location.replace("dashboard.html"); // Replace with your actual redirect URL
                 }
             });
         });
