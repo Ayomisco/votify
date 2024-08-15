@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Votify - Registration Form</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- site icon -->
+      <link rel="icon" href="../images/fevicon.png" type="image/png" />
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="../css/bootstrap.min.css" />
+      <!-- site css -->
+      <link rel="stylesheet" href="../style.css" />
+      <!-- responsive css -->
+      <link rel="stylesheet" href="../css/responsive.css" />
+      <!-- color css -->
+      <link rel="stylesheet" href="../css/colors.css" />
+      <!-- select bootstrap -->
+    />
+      <!-- custom css -->
+      <link rel="stylesheet" href="../css/custom.css" />
+
+ 
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+   </head>
+   <body class="inner_page login">
+      <div class="full_container">
+         <div class="container">
+            <div class="center verticle_center full_height">
+               <div class="login_section">
+                  <div class="logo_login">
+                     <div class="center">
+                        <img width="210" src="../images/logo/college_full.png" alt="#" />
+                     </div> <br>
+                     <div style="color: white; text-align: center; text-transform: uppercase;" class="center"> Create an Account </div>
+                  </div>
+                  <div class="login_form">
+                     <form id="registrationForm" action="../index.html" method="POST">
+                        <fieldset>
+                        <div class="mb-3">
+                           <label for="matricNumber" class="form-label">Matriculation Number</label>
+                           <input type="text" class="form-control" id="matricNumber" name="matric_number" placeholder="YYYY/ND/Dept/###"
+                              required />
+                        </div>
+                        <div class="mb-3">
+                           <label for="fullName" class="form-label">Full Name</label>
+                           <input type="text" class="form-control" id="fullName" name="full_name" placeholder="Full Name" required />
+                        </div>
+                        <div class="mb-3">
+                           <label for="department" class="form-label">Department</label>
+                           <div class="input-group">
+                              <select class="form-select form-control" id="department" name="department" required>
+                                 <option value="" disabled selected>Select Department</option>
+                                 <option value="Marine Engineering">Marine Engineering</option>
+                                 <option value="Nautical Science">Nautical Science</option>
+                                 <option value="Maritime Transport and Business Studies">Maritime Transport and Business Studies</option>
+                                 <option value="Computer Science">Computer Science</option>
+                                 <option value="Fisheries Technology">Fisheries Technology</option>
+                                 <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                 <option value="Science Laboratory Technology">Science Laboratory Technology</option>
+                                 <option value="Industrial and Labour Relations">Industrial and Labour Relations</option>
+                                 <option value="Oceanography and Fisheries Science">Oceanography and Fisheries Science</option>
+                                 <option value="Hydrology and Water Resources Management">Hydrology and Water Resources Management</option>
+                              </select>
+
+                           </div>
+                        </div>
+
+                        <div class="mb-3">
+                           <label for="email" class="form-label">Email Address</label>
+                           <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required />
+                        </div>
+                        <div class="mb-3">
+                           <label for="password" class="form-label">Password</label>
+                           <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+                        </div>
+
+                           <div class="mb-3">
+                              <label for="password" class="form-label">Confirm Password</label>
+                              <input type="password" class="form-control" id="password" name="confirm_password" placeholder="Password" required />
+                           </div>
+
+                           <div class="field">
+                             <label for="" class="">Already have an account? <a class="" style="color: red;" href="login.html">Login</a></label>
+                           </div>
+                           <div class="d-flex center">
+                             <button type="submit" class="btn btn-primary">Register</button>
+                           </div>
+                        </fieldset>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- jQuery -->
+      <script src="../js/jquery.min.js"></script>
+      <script src="../js/popper.min.js"></script>
+      <script src="../js/bootstrap.min.js"></script>
+      <!-- wow animation -->
+      <script src="../js/animate.js"></script>
+      <!-- select country -->
+      <script src="../js/bootstrap-select.js"></script>
+      <!-- nice scrollbar -->
+      <script src="../js/perfect-scrollbar.min.js"></script>
+      <script>
+         var ps = new PerfectScrollbar('#sidebar');
+      </script>
+      <!-- custom js -->
+      <script src="../js/custom.js"></script>
+
+      <!-- SweetAlert2 CDN -->
+
+      <script src="../js/reg_val.js"></script>
+
+   </body>
+</html>
