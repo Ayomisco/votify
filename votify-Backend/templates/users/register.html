@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Votify - Registration Form</title>
+    <link rel="icon" href="{% static 'images/fevicon.png' %}" type="image/png" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="inner_page login">
+    <div class="full_container">
+        <div class="container">
+            <div class="center verticle_center full_height">
+                <div class="login_section">
+                    <div class="logo_login">
+                        <div class="center">
+                            <img width="210" src="{% static 'images/logo/college_full.png' %}" alt="#" />
+                        </div>
+                        <br>
+                        <div style="color: white; text-align: center; text-transform: uppercase;" class="center">Create an Account</div>
+                    </div>
+                    <div class="login_form">
+                        <form id="registrationForm" method="POST">
+                            {% csrf_token %}
+                            <fieldset>
+                                <div class="mb-3">
+                                    <label for="matricNumber" class="form-label">Matriculation Number</label>
+                                    <input type="text" class="form-control" id="matricNumber" name="matric_number" placeholder="YYYY/MTBM/ND-HNG/###" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" name="full_name" placeholder="Full Name" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Department</label>
+                                    <div class="input-group">
+                                        <select class="form-select form-control" id="department" name="department" required>
+                                            <option value="" disabled selected>Select Department</option>
+                                            {% for department in form.fields.department.queryset %}
+                                                <option value="{{ department.id }}">{{ department.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirm_password" class="form-label">Confirm Password</label>
+                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Password" required />
+                                </div>
+                                <div class="field">
+                                    <label for="" class="">Already have an account? <a class="" style="color: red;" href="{% url 'login' %}">Login</a></label>
+                                </div>
+                                <div class="d-flex center">
+                                    <button type="submit" class="btn btn-primary">Register</button>
+                                </div>
+                            </fieldset>
+                        </form>
+                        <!-- Display flash messages -->
+                        {% if messages %}
+                            <script>
+                                {% for message in messages %}
+                                    Swal.fire({
+                                        icon: '{{ message.tags }}',
+                                        title: '{{ message.message }}',
+                                        showConfirmButton: true
+                                    });
+                                {% endfor %}
+                            </script>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
