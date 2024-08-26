@@ -18,21 +18,26 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_staff', 'is_superuser')
     search_fields = ('email', 'full_name')
     ordering = ('email',)
+    actions = ['mark_active']  # Custom actions
+
+    def mark_active(self, request, queryset):
+        queryset.update(is_active=True)
+    mark_active.short_description = "Mark selected users as active"
 
     # Define fields for creating and editing users
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {
-         'fields': ('full_name', 'department', 'profile_pic', 'matriculation_number')}),
+         'fields': ('full_name', 'school_level', 'department', 'profile_pic', 'matriculation_number')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-        ('Important dates', {
-         'fields': ('last_login', 'created_at', 'updated_at')}),
+        
     )
+    # ('Important dates', { 'fields': ('last_login', 'created_at', 'updated_at')}),
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('matriculation_number', 'full_name', 'department', 'email', 'password', 'confirm_password', 'is_staff')}
+            'fields': ('matriculation_number', 'full_name', 'department', 'school_level', 'email', 'password', 'confirm_password', 'is_staff')}
         ),
     )
 
@@ -69,6 +74,10 @@ class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'created_at', 'updated_at')
     search_fields = ('name',)
 
+
+admin.site.site_header = "Votify Admin Portal"
+admin.site.site_title = "Votify Admin Portal"
+admin.site.index_title = "Welcome to Votify Admin Portal"
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Department, DepartmentAdmin)

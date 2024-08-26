@@ -43,9 +43,22 @@
                   <form id="loginForm" action="{% url 'login' %}" method="POST">
                      {% csrf_token %}
                      <fieldset>
+                          <!-- Display form errors -->
+                                {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for field, errors in form.errors.items %}
+                                                {% for error in errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                                
                         <div class="mb-3">
                            <label for="matricNumber" class="form-label">Matriculation Number</label>
-<input type="text" name="username" id="matricNumber" class="form-control" value="{{ form.username.value }}">
+<input type="text" name="matriculation_number" id="matricNumber" class="form-control" value="{{ form.matriculation_number.value }}">
                         </div>
                         <div class="mb-3">
                            <label for="password" class="form-label">Password</label>

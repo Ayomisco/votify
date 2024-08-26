@@ -5,8 +5,7 @@ from django.utils import timezone
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, matriculation_number, email, password=None, **extra_fields):
-        if matriculation_number is None:
-            matriculation_number = ''  # Default to empty string if not provided
+        
         if not email:
             raise ValueError('The Email must be set')
         email = self.normalize_email(email)
@@ -39,20 +38,39 @@ class Department(models.Model):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    ND1 = 'ND1'
+    ND2 = 'ND2'
+    HNG1 = 'HNG1'
+    HNG2 = 'HNG2'
+
+    SCHOOL_LEVEL_CHOICES = [
+        (ND1, 'ND1'),
+        (ND2, 'ND2'),
+        (HNG1, 'HNG1'),
+        (HNG2, 'HNG2'),
+    ]
+    
     matriculation_number = models.CharField(
         max_length=255, blank=True, null=True,  unique=True)
     full_name = models.CharField(max_length=255, null=True, blank=True)
     department = models.ForeignKey(
         Department, on_delete=models.CASCADE, null=True, blank=True)
+    school_level = models.CharField(
+        max_length=10,
+        choices=SCHOOL_LEVEL_CHOICES, null=True, blank=True
+    )
     profile_pic = models.ImageField(
         upload_to='profile_pics/', blank=True, null=True)
     email = models.EmailField(unique=True, null=True, blank=True)
     password = models.CharField(max_length=255)
+
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)  # Required for admin access
     is_superuser = models.BooleanField(
         default=False)  # Required for superuser access
+    is_active = models.BooleanField(default=True)  # Required for admin access
+
     
 
     USERNAME_FIELD = 'email'
@@ -68,6 +86,11 @@ class User(AbstractBaseUser, PermissionsMixin):
             ("can_edit_users", "Can edit users"),
             ("can_delete_users", "Can delete users"),
         ]
+
+        # Orders by 'created_at' descending, then by 'full_name' ascending
+        ordering = ['-created_at', 'full_name']
+
+    
 
 
     def __str__(self):

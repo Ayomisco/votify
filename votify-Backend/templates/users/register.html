@@ -30,9 +30,22 @@
                         <form id="registrationForm" method="POST">
                             {% csrf_token %}
                             <fieldset>
+
+                                <!-- Display form errors -->
+                                {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for field, errors in form.errors.items %}
+                                                {% for error in errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                                 <div class="mb-3">
                                     <label for="matricNumber" class="form-label">Matriculation Number</label>
-                                    <input type="text" class="form-control" id="matricNumber" name="matric_number" placeholder="YYYY/MTBM/ND-HNG/###" required />
+                                    <input type="text" class="form-control" id="matricNumber" name="matriculation_number" placeholder="YYYY/MTBM/ND-HNG/###" required />
                                 </div>
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>

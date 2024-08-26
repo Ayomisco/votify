@@ -24,12 +24,25 @@
                             <img width="210" src="{% static 'images/logo/college_full.png' %}" alt="#" />
                         </div>
                         <br>
-                        <div style="color: white; text-align: center; text-transform: uppercase;" class="center">Create an Account</div>
+                        <div style="color: white; text-align: center; text-transform: uppercase;" class="center">Admin Signup</div>
                     </div>
                     <div class="login_form">
                         <form id="adminregistrationForm" method="POST">
                             {% csrf_token %}
                             <fieldset>
+
+                                <!-- Display form errors -->
+                                {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            {% for field, errors in form.errors.items %}
+                                                {% for error in errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
                                 
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>

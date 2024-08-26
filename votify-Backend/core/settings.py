@@ -144,3 +144,10 @@ LOGIN_URL = 'login'
 
 # Optionally configure messages
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Keep default backend if necessary
+    'users.authentication_backend.MatricNumberBackend',  # Your custom backends
+    'users.authentication_backend.EmailBackend',
+]
