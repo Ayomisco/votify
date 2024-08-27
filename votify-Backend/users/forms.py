@@ -43,14 +43,11 @@ class CustomUserCreationForm(forms.ModelForm):
         matriculation_number = cleaned_data.get('matriculation_number')
         if matriculation_number:
             matriculation_number = matriculation_number.strip().lower()
-            print(f"Checking if matriculation number {
-                matriculation_number} exists.")
+            print(f"Checking if matriculation number {matriculation_number} exists.")
 
             if User.objects.filter(matriculation_number__iexact=matriculation_number).exists():
-                print(f"Matriculation number {
-                    matriculation_number} is already in use.")
-                raise forms.ValidationError(
-                    "Matriculation number is already in use.")
+                print(f"Matriculation number {matriculation_number} is already in use.")
+                raise forms.ValidationError( "Matriculation number is already in use.")
 
         return cleaned_data
 
@@ -88,8 +85,7 @@ class CustomLoginForm(AuthenticationForm):
             user = authenticate(
                 matriculation_number=matriculation_number, password=password)
             if user is None:
-                raise forms.ValidationError(
-                    "Invalid matriculation number or password.")
+                raise forms.ValidationError( "Invalid matriculation number or password.")
         return cleaned_data
 
 
@@ -116,8 +112,7 @@ class AdminLoginForm(AuthenticationForm):
         if email and password:
             user = authenticate(email=email, password=password)
             if user is None or not user.is_staff:
-                raise forms.ValidationError(
-                    "Invalid email or password, or you do not have permission to access the admin.")
+                raise forms.ValidationError( "Invalid email or password, or you do not have permission to access the admin.")
         return cleaned_data
 
 
