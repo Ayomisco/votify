@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ma*@*@*8#v3-(!i3x&55n%%ye-o7q0^5xg31m()izvrqb2u!@%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['votify.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['votify.pythonanywhere.com', '127.0.0.1', '.vercel.app']
 
 
 # Application definition
