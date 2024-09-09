@@ -10,6 +10,11 @@ from django.views.generic import TemplateView
 from django.contrib import messages
 
 
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+    
+
 class DashboardView(TemplateView):
     template_name = 'dashboard.html'
 
