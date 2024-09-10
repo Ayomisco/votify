@@ -43,7 +43,6 @@ class CustomUserCreationForm(forms.ModelForm):
         matriculation_number = cleaned_data.get('matriculation_number')
         if matriculation_number:
             matriculation_number = matriculation_number.strip().lower()
-            print(f"Checking if matriculation number {matriculation_number} exists.")
 
             if User.objects.filter(matriculation_number__iexact=matriculation_number).exists():
                 print(f"Matriculation number {matriculation_number} is already in use.")
@@ -66,7 +65,7 @@ class CustomUserCreationForm(forms.ModelForm):
 class CustomUserChangeForm(BaseUserChangeForm):
     class Meta:
         model = User
-        fields = ('email', 'full_name', 'department', 'profile_pic',
+        fields = ('email', 'full_name', 'department', 'profile_pic', 'user_type',
                   'is_staff', 'is_superuser', 'school_level', 'matriculation_number', )
 
 class CustomLoginForm(AuthenticationForm):
