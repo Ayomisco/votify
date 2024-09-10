@@ -52,13 +52,12 @@ class CustomUserCreationForm(forms.ModelForm):
         return cleaned_data
 
 
-
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
+        user.user_type = 'student'  # Set user type to 'student'
         if commit:
             print("Saving user:", user)
-
             user.save()
         return user
 
@@ -93,6 +92,27 @@ class AdminLoginForm(AuthenticationForm):
     email = forms.EmailField(label="Email")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        password = cleaned_data.get('password')
+
+        print(f"Cleaned Data: {cleaned_data}")  # Debugging
+
+        if email and password:
+            print(f"Authenticating user with email: {email}")  # Debugging
+            user = authenticate(request=self.request,
+                                username=email, password=password)
+            if user is None:
+                print(f"Authentication failed for email: {email}")  # Debugging
+                raise forms.ValidationError(
+                    "Invalid email or password, or you do not have permission to access the admin.")
+            elif not user.is_staff:
+                print(f"User is not staff: {email}")  # Debugging
+                raise forms.ValidationError(
+                    "You do not have permission to access the admin.")
+
+        return cleaned_data
 
     '''
     def confirm_login_allowed(self, user):
@@ -101,7 +121,7 @@ class AdminLoginForm(AuthenticationForm):
                 "Admins should log in using their email.",
                 code='email_required',
             )
-        super().confirm_login_allowed(user)'''
+        super().confirm_login_allowed(user)
 
 
     def clean(self):
@@ -110,13 +130,14 @@ class AdminLoginForm(AuthenticationForm):
         password = cleaned_data.get('password')
 
         if email and password:
-            user = authenticate(email=email, password=password)
+            user = authenticate(request=self.request,
+                                email=email, password=password)
             if user is None or not user.is_staff:
                 raise forms.ValidationError( "Invalid email or password, or you do not have permission to access the admin.")
         return cleaned_data
 
 
-
+'''
 
 class CustomAdminCreationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -132,9 +153,16 @@ class CustomAdminCreationForm(forms.ModelForm):
         password = cleaned_data.get('password')
         confirm_password = cleaned_data.get('confirm_password')
 
-        if password and confirm_password and password != confirm_password:
-            raise ValidationError("Passwords do not match.")
+        print(f"Cleaned Data: {cleaned_data}")  # Debugging
+
+        if password and confirm_password:
+            print(f"Checking passwords: {password} and {
+                  confirm_password}")  # Debugging
+            if password != confirm_password:
+                print("Passwords do not match.")  # Debugging
+                raise ValidationError("Passwords do not match.")
         return cleaned_data
+
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -145,6 +173,8 @@ class CustomAdminCreationForm(forms.ModelForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.set_password(self.cleaned_data['password'])
+        user.user_type = 'admin'  # Set user type to 'admin'
         if commit:
+            print(f"Saving user: {user.email}")  # Debugging
             user.save()
         return user

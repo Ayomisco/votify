@@ -20,8 +20,13 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['user'] = self.request.user
+        user = self.request.user
+        if user.is_staff:
+            context['admin_dashboard'] = True  # Admin-specific data
+        else:
+            context['student_dashboard'] = True  # Student-specific data
         return context
+
 
 
 class UserRegistrationView(View):
@@ -35,7 +40,7 @@ class UserRegistrationView(View):
             form.save()
             messages.success(
             self.request, 'Registration successful. Please log in.')
-            return redirect('login')
+            return redirect('dashboard')
         else:
             messages.error(
                 self.request, 'Registration failed. Please correct the errors below.')
@@ -71,16 +76,26 @@ class AdminLoginView(DjangoLoginView):
     def form_valid(self, form):
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
-        user = authenticate(email=email, password=password)
-        if user is not None and user.is_staff:
-            auth_login(self.request, user)
-            messages.success(self.request, 'Login successful!')
 
+        print(f"Form data: email={email}, password={password}")  # Debugging
+
+        user = authenticate(request=self.request,
+                            username=email, password=password)
+
+        if user is not None and user.is_staff:
+            print(f"Login successful for email: {email}")  # Debugging
+            auth_login(self.request, user)
+            print(f"Login successful for email: {email}")  # Debugging
+
+            messages.success(self.request, 'Login successful!')
             return redirect('admin:index')
         else:
+            print(f"Login failed for email: {email}")  # Debugging
             messages.error(
-                self.request, 'Invalid email or password.')
+                self.request, 'Invalid email or password, or you do not have permission to access the admin.')
+
         return super().form_invalid(form)
+
 
 
 class CustomAdminSignupView(View):

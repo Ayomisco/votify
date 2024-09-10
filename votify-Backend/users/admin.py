@@ -15,7 +15,7 @@ class UserAdmin(BaseUserAdmin):
     form = CustomUserChangeForm
     # Define which fields to display on the admin interface
     list_display = ('email', 'full_name', 'is_staff')
-    list_filter = ('is_staff', 'is_superuser')
+    list_filter = ('is_staff', 'is_superuser', 'user_type')
     search_fields = ('email', 'full_name')
     ordering = ('email',)
     actions = ['mark_active']  # Custom actions
@@ -28,18 +28,18 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {
-         'fields': ('full_name', 'school_level', 'department', 'profile_pic', 'matriculation_number')}),
+            'fields': ('full_name', 'school_level', 'department', 'profile_pic', 'matriculation_number', 'user_type')
+        }),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-        
     )
-    # ('Important dates', { 'fields': ('last_login', 'created_at', 'updated_at')}),
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('matriculation_number', 'full_name', 'department', 'school_level', 'email', 'password', 'confirm_password', 'is_staff')}
-        ),
+            'fields': ('matriculation_number', 'full_name', 'department', 'school_level', 'email', 'password', 'confirm_password', 'is_staff', 'user_type')
+        }),
     )
+
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

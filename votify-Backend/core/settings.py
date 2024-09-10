@@ -148,6 +148,5 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Keep default backend if necessary
-    'users.authentication_backend.MatricNumberBackend',  # Your custom backends
-    'users.authentication_backend.EmailBackend',
+    'users.authentication_backend.CustomAuthBackend',  # Your custom backends
 ]

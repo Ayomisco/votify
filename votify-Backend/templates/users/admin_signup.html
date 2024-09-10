@@ -82,17 +82,7 @@
                             </script>
                         {% endif %}
 
-                        {% if form.errors %}
-                            <script>
-                                {% for field, error in form.errors.items %}
-                                    Swal.fire({
-                                        icon: '{{ field.tags }}',
-                                        title: '{{ errors }}',
-                                        showConfirmButton: true
-                                    });
-                                {% endfor %}
-                            </script>
-                        {% endif %}
+                       
                     </div>
                 </div>
             </div>

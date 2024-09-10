@@ -19,10 +19,8 @@
    <!-- responsive css -->
    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
    <!-- color css -->
-   <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
    <!-- custom css -->
    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
-   <link rel="stylesheet" href="{% static 'css/login_custom.css' %}" />
 
    <!-- SweetAlert2 CDN -->
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -57,8 +55,8 @@
                                     </div>
                                 {% endif %}
                         <div class="mb-3">
-                           <label for="matricNumber" class="form-label">Email</label>
-<input type="text" name="email" id="matricNumber" class="form-control" value="{{ form.email.value }}">
+                           <label for="email" class="form-label">Email</label>
+<input type="text" name="email" id="email" class="form-control" value="{{ form.email.value }}">
                         </div>
                         <div class="mb-3">
                            <label for="password" class="form-label">Password</label>

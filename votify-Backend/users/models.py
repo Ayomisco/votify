@@ -4,13 +4,13 @@ from django.utils import timezone
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, matriculation_number, email, password=None, **extra_fields):
-        
+    def create_user(self, email, password=None, matriculation_number='', **extra_fields):
         if not email:
-            raise ValueError('The Email must be set')
+            raise ValueError('The Email field must be set')
         email = self.normalize_email(email)
         user = self.model(
-            matriculation_number=matriculation_number, email=email, **extra_fields)
+            matriculation_number=matriculation_number, email=email, **extra_fields
+        )
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -18,14 +18,15 @@ class CustomUserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
+        # Ensure user_type is set to 'admin'
+        extra_fields.setdefault('user_type', 'admin')
 
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
 
-        return self.create_user(matriculation_number=None, email=email, password=password, **extra_fields)
-
+        return self.create_user(email=email, password=password, **extra_fields)
 
 class Department(models.Model):
     name = models.CharField(max_length=255)
@@ -49,6 +50,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         (HNG1, 'HNG1'),
         (HNG2, 'HNG2'),
     ]
+
+    USER_TYPE_CHOICES = [
+        ('student', 'Student'),
+        ('admin', 'Admin'),
+    ]
+
+    user_type = models.CharField(
+        max_length=10, choices=USER_TYPE_CHOICES, default='student')
+
     
     matriculation_number = models.CharField(
         max_length=255, blank=True, null=True,  unique=True)

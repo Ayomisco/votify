@@ -45,7 +45,7 @@
                                 {% endif %}
                                 <div class="mb-3">
                                     <label for="matricNumber" class="form-label">Matriculation Number</label>
-                                    <input type="text" class="form-control" id="matricNumber" name="matriculation_number" placeholder="YYYY/MTBM/ND-HNG/###" required />
+                                    <input type="text" class="form-control" id="matricNumber" name="matriculation_number" placeholder="YYYY/MTBM/Year/###" required />
                                 </div>
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>
@@ -83,17 +83,7 @@
                             </fieldset>
                         </form>
                         <!-- Display flash messages -->
-                        {% if messages %}
-                            <script>
-                                {% for message in messages %}
-                                    Swal.fire({
-                                        icon: '{{ message.tags }}',
-                                        title: '{{ message.message }}',
-                                        showConfirmButton: true
-                                    });
-                                {% endfor %}
-                            </script>
-                        {% endif %}
+                        
                     </div>
                 </div>
             </div>

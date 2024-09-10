@@ -19,10 +19,8 @@
    <!-- responsive css -->
    <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
    <!-- color css -->
-   <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
    <!-- custom css -->
    <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
-   <link rel="stylesheet" href="{% static 'css/login_custom.css' %}" />
 
    <!-- SweetAlert2 CDN -->
    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -58,7 +56,7 @@
                                 
                         <div class="mb-3">
                            <label for="matricNumber" class="form-label">Matriculation Number</label>
-<input type="text" name="matriculation_number" id="matricNumber" class="form-control" value="{{ form.matriculation_number.value }}">
+<input type="text" name="matriculation_number" id="matricNumber" class="form-control" value="" placeholder="YYYY/MTBM/Year/###">
                         </div>
                         <div class="mb-3">
                            <label for="password" class="form-label">Password</label>
@@ -85,19 +83,7 @@
    <script src="{% static 'js/bootstrap.min.js' %}"></script>
    <!-- custom js -->
    <script src="{% static 'js/reg_val.js' %}"></script>
-   <script>
-      document.addEventListener('DOMContentLoaded', function() {
-         {% if messages %}
-            {% for message in messages %}
-               Swal.fire({
-                  icon: '{{ message.tags }}',
-                  title: '{{ message.message }}',
-                  showConfirmButton: true
-               });
-            {% endfor %}
-         {% endif %}
-      });
-   </script>
+   
 </body>
 
 </html>
