@@ -155,8 +155,7 @@ class CustomAdminCreationForm(forms.ModelForm):
         print(f"Cleaned Data: {cleaned_data}")  # Debugging
 
         if password and confirm_password:
-            print(f"Checking passwords: {password} and {
-                  confirm_password}")  # Debugging
+            print(f"Checking passwords: {password} and {confirm_password}")  # Debugging
             if password != confirm_password:
                 print("Passwords do not match.")  # Debugging
                 raise ValidationError("Passwords do not match.")
