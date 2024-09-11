@@ -98,8 +98,7 @@ class CustomLoginView(View):
         matriculation_number = request.POST.get('matriculation_number')
         password = request.POST.get('password')
 
-        logger.debug(f"Attempting login with matriculation number: {
-                     matriculation_number}")
+        logger.debug(f"Attempting login with matriculation number: {matriculation_number}")
 
         try:
             # Authenticate user
@@ -109,14 +108,12 @@ class CustomLoginView(View):
             if user is not None:
                 auth_login(request, user)
                 messages.success(request, 'Login successful!')
-                logger.info(f"Login successful for matriculation number: {
-                            matriculation_number}")
+                logger.info(f"Login successful for matriculation number: {matriculation_number}")
                 return redirect('dashboard')
             else:
                 messages.error(
                     request, 'Invalid matriculation number or password.')
-                logger.warning(f"Login failed for matriculation number: {
-                               matriculation_number}")
+                logger.warning(f"Login failed for matriculation number: { matriculation_number}")
                 return render(request, 'users/login.html')
         except Exception as e:
             logger.error(f"Unexpected error during login: {e}")
