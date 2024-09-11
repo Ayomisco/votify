@@ -1,0 +1,32 @@
+.countdown-box {
+    width: 80px;
+    height: 80px;
+    background-color: #120b3e;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+
+.countdown-box.yellow {
+    background-color: #f67119;
+}
+
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.countdown-time {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.countdown-label {
+    font-size: 14px;
+    text-transform: uppercase;
+}
