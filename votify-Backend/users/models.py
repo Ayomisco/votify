@@ -28,14 +28,6 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email=email, password=password, **extra_fields)
 
-class Department(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -56,6 +48,37 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('admin', 'Admin'),
     ]
 
+
+# Department choices
+    MARINE_ENGINEERING = 'Marine Engineering'
+    NAUTICAL_SCIENCE = 'Nautical Science'
+    MARITIME_TRANSPORT = 'Maritime Transport and Business Studies'
+    COMPUTER_SCIENCE = 'Computer Science'
+    FISHERIES_TECHNOLOGY = 'Fisheries Technology'
+    MECHANICAL_ENGINEERING = 'Mechanical Engineering'
+    LAB_TECHNOLOGY = 'Science Laboratory Technology'
+    LABOUR_RELATIONS = 'Industrial and Labour Relations'
+    OCEANOGRAPHY = 'Oceanography and Fisheries Science'
+    HYDROLOGY = 'Hydrology and Water Resources Management'
+
+    DEPARTMENT_CHOICES = [
+        (MARINE_ENGINEERING, 'Marine Engineering'),
+        (NAUTICAL_SCIENCE, 'Nautical Science'),
+        (MARITIME_TRANSPORT, 'Maritime Transport and Business Studies'),
+        (COMPUTER_SCIENCE, 'Computer Science'),
+        (FISHERIES_TECHNOLOGY, 'Fisheries Technology'),
+        (MECHANICAL_ENGINEERING, 'Mechanical Engineering'),
+        (LAB_TECHNOLOGY, 'Science Laboratory Technology'),
+        (LABOUR_RELATIONS, 'Industrial and Labour Relations'),
+        (OCEANOGRAPHY, 'Oceanography and Fisheries Science'),
+        (HYDROLOGY, 'Hydrology and Water Resources Management'),
+    ]
+
+
+    department = models.CharField(
+        max_length=100, choices=DEPARTMENT_CHOICES, null=True, blank=True
+    )
+
     user_type = models.CharField(
         max_length=10, choices=USER_TYPE_CHOICES, default='student')
 
@@ -63,8 +86,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     matriculation_number = models.CharField(
         max_length=255, blank=True, null=True,  unique=True)
     full_name = models.CharField(max_length=255, null=True, blank=True)
-    department = models.ForeignKey(
-        Department, on_delete=models.CASCADE, null=True, blank=True)
+   # Use the choices for departments
+    department = models.CharField(
+        max_length=100, choices=DEPARTMENT_CHOICES, null=True, blank=True
+    )
     school_level = models.CharField(
         max_length=10,
         choices=SCHOOL_LEVEL_CHOICES, null=True, blank=True

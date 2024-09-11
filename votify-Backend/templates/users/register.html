@@ -45,26 +45,37 @@
                                 {% endif %}
                                 <div class="mb-3">
                                     <label for="matricNumber" class="form-label">Matriculation Number</label>
-                                    <input type="text" class="form-control" id="matricNumber" name="matriculation_number" placeholder="YYYY/MTBM/Year/###" required />
+                                    <input type="text" class="form-control" id="matricNumber" name="matriculation_number" placeholder="YYYY/DEPT/YEAR/###" value="{{ form.matriculation_number.value }}" required />
                                 </div>
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="fullName" name="full_name" placeholder="Full Name" required />
+                                    <input type="text" class="form-control" id="fullName" name="full_name" placeholder="Full Name" value="{{ form.full_name.value }}" required />
                                 </div>
                                 <div class="mb-3">
                                     <label for="department" class="form-label">Department</label>
                                     <div class="input-group">
                                         <select class="form-select form-control" id="department" name="department" required>
-                                            <option value="" disabled selected>Select Department</option>
-                                            {% for department in form.fields.department.queryset %}
-                                                <option value="{{ department.id }}">{{ department.name }}</option>
+                                            <option value="" disabled {% if not form.department.value %}selected{% endif %}>Select Department</option>
+                                            {% for value, label in form.fields.department.choices %}
+                                                <option value="{{ value }}" {% if value == form.department.value %}selected{% endif %}>{{ label }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="schoolLevel" class="form-label">School Level</label>
+                                    <select class="form-select form-control" id="schoolLevel" name="school_level" required>
+                                        <option value="" disabled {% if not form.school_level.value %}selected{% endif %}>Select School Level</option>
+                                        {% for value, label in form.fields.school_level.choices %}
+                                            <option value="{{ value }}" {% if value == form.school_level.value %}selected{% endif %}>{{ label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" required />
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="E-mail" value="{{ form.email.value }}" required />
                                 </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
@@ -75,20 +86,31 @@
                                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Password" required />
                                 </div>
                                 <div class="field">
-                                    <label for="" class="">Already have an account? <a class="" style="color: red;" href="{% url 'login' %}">Login</a></label>
+                                    <span for="" class="">Already have an account? <a class="" style="color: red;" href="{% url 'login' %}">Login</a></span>
                                 </div>
                                 <div class="d-flex center">
                                     <button type="submit" class="btn btn-primary">Register</button>
                                 </div>
                             </fieldset>
                         </form>
-                        <!-- Display flash messages -->
-                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+     {% if messages %}
+                            <script>
+                                {% for message in messages %}
+                                    Swal.fire({
+                                        icon: '{{ message.tags }}',
+                                        title: '{{ message.message }}',
+                                        showConfirmButton: true
+                                    });
+                                {% endfor %}
+                            </script>
+                        {% endif %}
+
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>

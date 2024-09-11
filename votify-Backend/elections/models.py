@@ -1,5 +1,4 @@
 from django.db import models
-from users.models import Department  # Importing Department from users.models
 
 
 class Election(models.Model):
@@ -19,12 +18,33 @@ class Election(models.Model):
         choices=ELECTION_TYPE_CHOICES,
         default=GENERAL
     )
-    department = models.ForeignKey(
-        Department,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        help_text='Optional for general elections.'
+    # Department choices
+    MARINE_ENGINEERING = 'Marine Engineering'
+    NAUTICAL_SCIENCE = 'Nautical Science'
+    MARITIME_TRANSPORT = 'Maritime Transport and Business Studies'
+    COMPUTER_SCIENCE = 'Computer Science'
+    FISHERIES_TECHNOLOGY = 'Fisheries Technology'
+    MECHANICAL_ENGINEERING = 'Mechanical Engineering'
+    LAB_TECHNOLOGY = 'Science Laboratory Technology'
+    LABOUR_RELATIONS = 'Industrial and Labour Relations'
+    OCEANOGRAPHY = 'Oceanography and Fisheries Science'
+    HYDROLOGY = 'Hydrology and Water Resources Management'
+
+    DEPARTMENT_CHOICES = [
+        (MARINE_ENGINEERING, 'Marine Engineering'),
+        (NAUTICAL_SCIENCE, 'Nautical Science'),
+        (MARITIME_TRANSPORT, 'Maritime Transport and Business Studies'),
+        (COMPUTER_SCIENCE, 'Computer Science'),
+        (FISHERIES_TECHNOLOGY, 'Fisheries Technology'),
+        (MECHANICAL_ENGINEERING, 'Mechanical Engineering'),
+        (LAB_TECHNOLOGY, 'Science Laboratory Technology'),
+        (LABOUR_RELATIONS, 'Industrial and Labour Relations'),
+        (OCEANOGRAPHY, 'Oceanography and Fisheries Science'),
+        (HYDROLOGY, 'Hydrology and Water Resources Management'),
+    ]
+
+    department = models.CharField(
+        max_length=100, choices=DEPARTMENT_CHOICES, null=True, blank=True
     )
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
@@ -54,11 +74,36 @@ class Candidate(models.Model):
     ]
 
     full_name = models.CharField(max_length=255)
-    department = models.ForeignKey(
-        Department,
-        on_delete=models.CASCADE,
-        help_text='The department the candidate belongs to.'
+    
+# Department choices
+    MARINE_ENGINEERING = 'Marine Engineering'
+    NAUTICAL_SCIENCE = 'Nautical Science'
+    MARITIME_TRANSPORT = 'Maritime Transport and Business Studies'
+    COMPUTER_SCIENCE = 'Computer Science'
+    FISHERIES_TECHNOLOGY = 'Fisheries Technology'
+    MECHANICAL_ENGINEERING = 'Mechanical Engineering'
+    LAB_TECHNOLOGY = 'Science Laboratory Technology'
+    LABOUR_RELATIONS = 'Industrial and Labour Relations'
+    OCEANOGRAPHY = 'Oceanography and Fisheries Science'
+    HYDROLOGY = 'Hydrology and Water Resources Management'
+
+    DEPARTMENT_CHOICES = [
+        (MARINE_ENGINEERING, 'Marine Engineering'),
+        (NAUTICAL_SCIENCE, 'Nautical Science'),
+        (MARITIME_TRANSPORT, 'Maritime Transport and Business Studies'),
+        (COMPUTER_SCIENCE, 'Computer Science'),
+        (FISHERIES_TECHNOLOGY, 'Fisheries Technology'),
+        (MECHANICAL_ENGINEERING, 'Mechanical Engineering'),
+        (LAB_TECHNOLOGY, 'Science Laboratory Technology'),
+        (LABOUR_RELATIONS, 'Industrial and Labour Relations'),
+        (OCEANOGRAPHY, 'Oceanography and Fisheries Science'),
+        (HYDROLOGY, 'Hydrology and Water Resources Management'),
+    ]
+
+    department = models.CharField(
+        max_length=100, choices=DEPARTMENT_CHOICES, null=True, blank=True
     )
+
     school_level = models.CharField(
         max_length=10,
         choices=SCHOOL_LEVEL_CHOICES

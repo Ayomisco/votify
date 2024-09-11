@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import logging
 import os
 from pathlib import Path
 
@@ -151,6 +152,7 @@ AUTHENTICATION_BACKENDS = [
     'users.authentication_backend.CustomAuthBackend',  # Your custom backends
 ]
 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -162,6 +164,11 @@ LOGGING = {
     },
     'loggers': {
         'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'users': {  # Replace 'myapp' with your actual app name or __name__ if you use the default logger.
             'handlers': ['console'],
             'level': 'DEBUG',
         },

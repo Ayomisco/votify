@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
     <link rel="stylesheet" href="{% static 'style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/colors.css' %}" />
     <link rel="stylesheet" href="{% static 'css/custom.css' %}" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
@@ -62,7 +61,7 @@
                                     <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Password" required />
                                 </div>
                                 <div class="field">
-                                    <label for="" class="">Already have an account? <a class="" style="color: red;" href="{% url 'admin_login' %}">Login</a></label>
+                                    <span for="" class="">Already have an account? <a class="" style="color: red;" href="{% url 'admin_login' %}">Login</a></span>
                                 </div>
                                 <div class="d-flex center">
                                     <button type="submit" class="btn btn-primary">Register</button>
