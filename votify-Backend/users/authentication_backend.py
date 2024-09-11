@@ -140,15 +140,12 @@ class CustomAuthBackend(BaseBackend):
                 user = User.objects.get(
                     matriculation_number=matriculation_number)
                 if user.check_password(password) and user.user_type == 'student':
-                    logger.info(f"Student authentication successful for matriculation number: {
-                                matriculation_number}")
+                    logger.info(f"Student authentication successful for matriculation number: { matriculation_number}")
                     return user
                 else:
-                    logger.warning(f"Failed student authentication attempt for matriculation number: {
-                                   matriculation_number}")
+                    logger.warning(f"Failed student authentication attempt for matriculation number: {matriculation_number}")
             except User.DoesNotExist:
-                logger.warning(f"Student user not found with matriculation number: {
-                               matriculation_number}")
+                logger.warning(f"Student user not found with matriculation number: { matriculation_number}")
 
         return None
 
