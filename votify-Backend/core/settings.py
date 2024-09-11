@@ -152,7 +152,7 @@ AUTHENTICATION_BACKENDS = [
     'users.authentication_backend.CustomAuthBackend',  # Your custom backends
 ]
 
-
+'''
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -174,3 +174,4 @@ LOGGING = {
         },
     },
 }
+'''

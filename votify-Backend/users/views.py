@@ -8,6 +8,7 @@ from .models import User
 from django.views.generic import TemplateView
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django import forms
 
 # Set up logging
 logger = logging.getLogger(__name__)
@@ -121,7 +122,7 @@ class CustomLoginView(View):
                 request, 'An unexpected error occurred. Please try again later.')
             return render(request, 'users/login.html')
 
-
+'''
 class AdminLoginView(View):
     def get(self, request):
         return render(request, 'users/admin_login.html')
@@ -153,6 +154,38 @@ class AdminLoginView(View):
                 request, 'An unexpected error occurred. Please try again later.')
             return render(request, 'users/admin_login.html')
 
+'''
+class AdminLoginForm(forms.Form):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
+class AdminLoginView(View):
+    def get(self, request):
+        form = AdminLoginForm()
+        return render(request, 'users/admin_login.html', {'form': form})
+
+    def post(self, request):
+        form = AdminLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            password = form.cleaned_data.get('password')
+
+            user = authenticate(request, username=email, password=password)
+
+            if user is not None and user.is_staff:
+                auth_login(request, user)
+                messages.success(request, 'Login successful!')
+                return redirect('admin:index')
+            else:
+                messages.error(
+                    request, 'Invalid email or password, or you do not have permission to access the admin.')
+        # Optional: Add specific form validation error feedback
+        else:    
+            messages.error(request, 'Please correctly fill the form.')
+
+        # Always re-render the form in the context if the login fails
+        return render(request, 'users/admin_login.html', {'form': form})
 
 class CustomAdminSignupView(View):
     def get(self, request):
