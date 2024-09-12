@@ -13,13 +13,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import logging
 import os
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-ma*@*@*8#v3-(!i3x&55n%%ye-o7q0^5xg31m()izvrqb2u!@%'
@@ -29,9 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['votify.pythonanywhere.com', '127.0.0.1', '.vercel.app']
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,7 +40,8 @@ INSTALLED_APPS = [
     'elections',
     'permissions',
     'audit_logs',
-
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.user_info',
             ],
         },
     },
@@ -76,10 +75,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -87,10 +83,7 @@ DATABASES = {
     }
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -106,39 +99,41 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-
-# Add this line if you are in development
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
-# For production, you should also have a STATIC_ROOT 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# Cloudinary settings
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dpy5zhquf',
+    'API_KEY': '372586339693315',
+    'API_SECRET': 'onC8Oyg7Je1HVGyUWXNd2qHEu_g',
+}
+
+cloudinary.config(
+    cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key=CLOUDINARY_STORAGE['API_KEY'],
+    api_secret=CLOUDINARY_STORAGE['API_SECRET']
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+# Authentication
 AUTH_USER_MODEL = 'users.User'
-
 LOGIN_REDIRECT_URL = 'login'
 LOGOUT_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
@@ -146,13 +141,12 @@ LOGIN_URL = 'login'
 # Optionally configure messages
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',  # Keep default backend if necessary
     'users.authentication_backend.CustomAuthBackend',  # Your custom backends
 ]
 
-'''
+# Logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -168,10 +162,9 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
-        'users': {  # Replace 'myapp' with your actual app name or __name__ if you use the default logger.
+        'cloudinary': {  # Optional: add Cloudinary logging
             'handlers': ['console'],
             'level': 'DEBUG',
         },
     },
 }
-'''

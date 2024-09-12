@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Vote for Candidates{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row column_title">
+        <div class="col-md-12">
+            <div class="page_title">
+                <h2>Election: {{ election.title }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Countdown Timer -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="countdown-container center col">
+                <div class="countdown-box">
+                    <div id="days" class="countdown-time">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="hours" class="countdown-time">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-box">
+                    <div id="minutes" class="countdown-time">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-box yellow">
+                    <div id="seconds" class="countdown-time">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Candidates List -->
+    <div class="row column1">
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Candidates</h2>
+                    </div>
+                </div>
+                <div class="full price_table padding_infor_info">
+                    <div class="row">
+                        {% for candidate in election.candidates.all %}
+                            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 profile_details margin_bottom_30">
+                                <div class="card">
+                                    <div class="card h-100 text-center border-0">
+                                        <div class="card-body">
+                                            <img src="{{ candidate.image.url }}" class="rounded-circle mb-3 img-responsive img-fluid w-50"
+                                                alt="Candidate Image">
+                                            <h5 class="card-title fw-bold">{{ candidate.full_name }}</h5>
+                                            <h6 class="card-subtitle mb-2 text-muted">Running for: <a href="#"
+                                                class="text-primary text-decoration-none fw-bold">{{ candidate.position }}</a></h6>
+                                            <h6 class="card-subtitle mb-2 text-muted">Department: <a href="#"
+                                                class="text-primary text-decoration-none fw-bold">{{ candidate.department }}</a></h6>
+                                            <p class="card-text">{{ candidate.about|slice:":150" }}...</p>
+                                        </div>
+                                        <div class="card-footer border-0 bg-white">
+                                            <!-- Button to View Manifesto -->
+                                            <button data-toggle="modal" data-target="#manifestoModal-{{ candidate.id }}" type="button" class="btn btn-primary me-2">View Manifesto</button>
+                                            
+                                            <!-- Button to Vote -->
+                                           <form method="post" action="{% url 'vote' election.id candidate.id %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Vote</button>
+</form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Modal for Manifesto -->
+                            <div class="modal fade" id="manifestoModal-{{ candidate.id }}" tabindex="-1" aria-labelledby="manifestoModalLabel-{{ candidate.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="manifestoModalLabel-{{ candidate.id }}">{{ candidate.full_name }}'s Manifesto</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>{{ candidate.manifesto }}</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% empty %}
+                            <p>No candidates available for this election.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Countdown Timer Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var endDate = new Date("{{ election.end_date|date:'Y/m/d H:i:s' }}").getTime();
+        var countdownInterval = setInterval(function () {
+            var now = new Date().getTime();
+            var distance = endDate - now;
+
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days;
+            document.getElementById('hours').innerText = hours;
+            document.getElementById('minutes').innerText = minutes;
+            document.getElementById('seconds').innerText = seconds;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('days').innerText = "00";
+                document.getElementById('hours').innerText = "00";
+                document.getElementById('minutes').innerText = "00";
+                document.getElementById('seconds').innerText = "00";
+                // Optionally display a message or change the countdown to "EXPIRED"
+            }
+        }, 1000);
+    });
+</script>
+
+{% endblock %}

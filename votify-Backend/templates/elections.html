@@ -1,220 +1,136 @@
-<!DOCTYPE html>
-<html lang="en">
-   <head>
-      <div id="header_1"></div>
+{% extends 'base.html' %}
 
-<div id="main_footer"></div>
+{% block title %}Election List{% endblock %}
 
-<script src="js/include.js"></script>
+{% block content %}
+<div class="container-fluid">
+    <div class="row column_title">
+        <div class="col-md-12">
+            <div class="page_title">
+                <h2>Election List</h2>
+            </div>
+        </div>
+    </div>
 
-   </head>
-   <body class="dashboard dashboard_1">
-     
-      <div class="full_container">
-         <div class="inner_container">
-            <!-- Sidebar  -->
-            <nav id="sidebar"></nav>
+    <!-- Filter by Election Type -->
+    <div class="row">
+        <div class="col-md-12">
+            <form method="get" class="form-inline">
+                <div class="form-group">
+                    <label for="election_type" class="mr-2">Filter by Election Type:</label>
+                    <select name="election_type" id="election_type" class="form-control">
+                        <option value="">All Elections</option>
+                        {% for key, value in election_types.items %}
+                            <option value="{{ key }}" {% if key == request.GET.election_type %}selected{% endif %}>{{ value }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary ml-2">Filter</button>
+            </form>
+        </div>
+    </div>
+    <br/> <br/>
 
-            <!-- end sidebar -->
-            <!-- right content -->
-            <div id="content">
-               <!-- topbar -->
+    <!-- Active Elections -->
+    <div class="row column4 graph">
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Active Elections</h2>
+                    </div>
+                </div>
+                <div class="full gallery_section_inner padding_infor_info">
+                    <div class="row">
+                        {% for election in active_elections %}
+                            <div class="col-sm-4 col-md-3 margin_bottom_30">
+                                <div class="column">
+                                    <a href="{% url 'voting_page' election.id %}">
+                                        <div class="election_card">
+                                            <h4>{{ election.title }}</h4>
+                                            <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
+                                            <p><strong>Department:</strong> {{ election.department }}</p>
+                                            <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
+                                            <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No active elections at the moment.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-               <div id="topbar"></div>
+    <!-- Upcoming Elections -->
+    <div class="row column4 graph">
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Upcoming Elections</h2>
+                    </div>
+                </div>
+                <div class="full gallery_section_inner padding_infor_info">
+                    <div class="row">
+                        {% for election in upcoming_elections %}
+                            <div class="col-sm-4 col-md-3 margin_bottom_30">
+                                <div class="column">
+                                    <a href="{% url 'voting_page' election.id %}">
+                                        <div class="election_card">
+                                            <h4>{{ election.title }}</h4>
+                                            <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
+                                            <p><strong>Department:</strong> {{ election.department }}</p>
+                                            <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
+                                            <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No upcoming elections at the moment.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-               <!-- end topbar -->
-                     
-               <!-- dashboard inner -->
-
-               <div class="midde_cont">
-                  <div class="container-fluid">
-                     <div class="row column_title">
-                        <div class="col-md-12">
-                           <div class="page_title">
-                              <h2> Election List</h2>
-                           </div>
-                        </div>
-                     </div>
-                     
-
-                     <!-- Insert Section -->
-
-                     <!-- row -->
-                     <div class="row column4 graph">
-                        <!-- Gallery section -->
-                        <div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                                    <h2>Active</h2>
-                                 </div>
-                              </div>
-                              <div class="full gallery_section_inner padding_infor_info">
-                                 <div class="row">
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g1.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g1.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4 style="font-size: 17; font-weight: 700;">The president</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g2.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g2.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4 style="font-size: 17; font-weight: 700;">The Vice President</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g3.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g3.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4 style="font-size: 17; font-weight: 700;">The Pro</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g4.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g4.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4 style="font-size: 17; font-weight: 700;">The General Secretary</h4>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-
-
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                                    <h2>Upcoming</h2>
-                                 </div>
-                              </div>
-                              <div class="full gallery_section_inner padding_infor_info">
-                                 <div class="row">
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g1.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g1.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g2.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g2.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g3.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g3.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g4.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g4.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-
-
-
-                           <div class="white_shd full margin_bottom_30">
-                              <div class="full graph_head">
-                                 <div class="heading1 margin_0">
-                                    <h2>Finished</h2>
-                                 </div>
-                              </div>
-                              <div class="full gallery_section_inner padding_infor_info">
-                                 <div class="row">
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g1.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g1.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g2.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g2.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g3.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g3.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                    <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                       <div class="column">
-                                          <a data-fancybox="gallery" href="images/layout_img/g4.jpg"><img class="img-responsive"
-                                                src="images/layout_img/g4.jpg" alt="#" /></a>
-                                       </div>
-                                       <div class="heading_section">
-                                          <h4>Sed ut perspiciatis</h4>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-
-
-
-                        </div>
-                     </div>
-                     
-
-                     <!-- Close Section -->
-
-
-                     
-
-
-                  </div>
-
-                  <!-- footer -->
-                     <div id="footer"></div>
-                  <!-- footer -->
-
-               </div>
-
-               <!-- end dashboard inner -->
-
-      </div>
-      </div>
-      </div>
-
-   </body>
-</html>
+    <!-- Finished Elections -->
+    <div class="row column4 graph">
+        <div class="col-md-12">
+            <div class="white_shd full margin_bottom_30">
+                <div class="full graph_head">
+                    <div class="heading1 margin_0">
+                        <h2>Finished Elections</h2>
+                    </div>
+                </div>
+                <div class="full gallery_section_inner padding_infor_info">
+                    <div class="row">
+                        {% for election in finished_elections %}
+                            <div class="col-sm-4 col-md-3 margin_bottom_30">
+                                <div class="column">
+                                    <a href="{% url 'voting_page' election.id %}">
+                                        <div class="election_card">
+                                            <h4>{{ election.title }}</h4>
+                                            <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
+                                            <p><strong>Department:</strong> {{ election.department }}</p>
+                                            <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
+                                            <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <p>No finished elections at the moment.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

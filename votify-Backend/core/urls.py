@@ -17,13 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from users.views import IndexView, DashboardView
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('user/', include('users.urls')),
+    path('', include('elections.urls')),
+
     path('', IndexView.as_view(), name='index'),
+    
 
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
 
     path('admin/', include('users.admin_urls')),  # Include custom admin URLs
 
-]
+] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

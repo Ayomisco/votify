@@ -205,3 +205,19 @@ class AdminLoginForm(AuthenticationForm):
                 "An unexpected error occurred during login. Please try again later.")
 
         return cleaned_data
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['full_name', 'email', 'matriculation_number',
+                  'department', 'school_level', 'profile_pic']
+
+        widgets = {
+            'full_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'matriculation_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
+            'school_level': forms.Select(attrs={'class': 'form-control'}),
+            'profile_pic': forms.FileInput(attrs={'class': 'form-control'}),
+        }

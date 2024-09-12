@@ -54,11 +54,17 @@
                 <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
                     <div class="user_profle_side">
-                        <div class="user_img"><img class="img-responsive" src="{% static 'images/layout_img/user_img.jpg' %}" alt="#" /></div>
-                        <div class="user_info">
-                            <h6>John David</h6>
-                            <p><span class="online_animation"></span> Online</p>
-                        </div>
+               <!--    <div class="user_img">
+                        <img class="img-responsive rounded-circle" 
+                            src="{% if user_profile_pic %}{{ user_profile_pic.url }}{% else %} https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI= {% endif %}" 
+                            alt="Profile Picture" />
+                    </div>--> 
+                    <div class="user_info">
+                        <h6>{{ user_full_name }}</h6>
+                        <p><span class="online_animation"></span> Online</p>
+                        <p>{{ user_email }}</p>
+                    </div>
+
                     </div>
                 </div>
             </div>
@@ -68,12 +74,12 @@
                     <li class="active">
                         <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span></a>
                     </li>
-                    <li><a href="# "><i class="fa fa-clock-o orange_color"></i> <span>Elections</span></a></li>
+                    <li><a href="{% url 'election_list' %} "><i class="fa fa-clock-o orange_color"></i> <span>Elections</span></a></li>
                     <li>
                         <a href="#"><i class="fa fa-diamond purple_color"></i> <span>Nominees</span></a>
                     </li>
                     <li><a href="#"><i class="fa fa-table purple_color2"></i> <span>Voting Results</span></a></li>
-                    <li><a href="#"><i class="fa fa-cog yellow_color"></i> <span>My Profile</span></a></li>
+                    <li><a href="{% url 'profile' %}"><i class="fa fa-cog yellow_color"></i> <span>My Profile</span></a></li>
                     
                 </ul>
             </div>
@@ -89,13 +95,15 @@
                     <div class="full">
                         <button type="button" id="sidebarCollapse" class="sidebar_toggle"><i class="fa fa-bars"></i></button>
                         <div class="logo_section">
-                            <a href="{% url 'dashboard' %}"><img class="img-responsive" src="{% static 'images/logo/votify_logo.png' %}" alt="#" /></a>
+                            <a href="{% url 'dashboard' %}"> <img class="logo_icon img-responsive" src="{% static 'images/logo/votify_logo_nobg.png' %}" alt="#" /></a>
                         </div>
                         <div class="right_topbar">
                             <div class="icon_info">
                                 <ul class="user_profile_dd">
                                     <li>
-                                        <a class="dropdown-toggle" data-toggle="dropdown"><img class="img-responsive rounded-circle" src="{% static 'images/layout_img/user_img.jpg' %}" alt="#" /><span class="name_user">John David</span></a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown"> <img class="img-responsive rounded-circle" 
+                            src="{% if user_profile_pic %}{{ user_profile_pic.url }}{% else %} https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=  {% endif %}" 
+                            alt="Profile Picture" /> <span class="name_user">{{ user_full_name }}</span></a>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="#">My Profile</a>
                                             <form action="{% url 'logout' %}" method="post" style="display: inline;">
@@ -149,9 +157,19 @@
 <script src="{% static 'js/analyser.js' %}"></script>
 <!-- nice scrollbar -->
 <script src="{% static 'js/perfect-scrollbar.min.js' %}"></script>
+
+{% if request.user.is_authenticated %}
+    <!-- Your entire base.html content goes here -->
+{% else %}
+    <script>
+        window.location.href = "{% url 'login' %}";
+    </script>
+{% endif %}
+
 <script>
     var ps = new PerfectScrollbar('#sidebar');
 </script>
+
 <!-- custom js -->
 <script src="{% static 'js/custom.js' %}"></script>
 <script src="{% static 'js/chart_custom_style1.js' %}"></script>
