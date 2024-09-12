@@ -4,8 +4,8 @@
 
 {% block extra_css %}
 {% endblock %}
-                     
-               <!-- dashboard inner -->
+
+<!-- dashboard inner -->
 {% block content %}
 {% load static %}
 <div class="container-fluid">
@@ -17,6 +17,89 @@
         </div>
     </div>
 
+    <div class="row column3">
+    <!-- Election Winners -->
+    <div class="col-md-6">
+        <div class="dark_bg full margin_bottom_30">
+            <div class="full graph_head">
+                <div class="heading1 margin_0">
+                    <h2>Election Winners</h2>
+                </div>
+            </div>
+            <div class="full graph_revenue">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="content testimonial">
+                            <div id="testimonial_slider" class="carousel slide" data-ride="carousel">
+                                <!-- Wrapper for carousel items -->
+                                <div class="carousel-inner">
+                                    {% if election_winners %}
+                                        {% for candidate, election in election_winners %}
+                                            <div class="item carousel-item {% if forloop.first %}active{% endif %}">
+                                                <div class="img-box">
+                                                    {% if candidate.image %}
+                                                        <img src="{{ candidate.image.url }}" alt="{{ candidate.full_name }}">
+                                                    {% else %}
+                                                        <img src="{% static 'images/layout_img/user_img.png' %}" alt="">
+                                                    {% endif %}
+                                                </div>
+                                                <p class="testimonial">{{ candidate.about }}</p>
+                                                <p class="overview"><b>{{ candidate.full_name }}</b> - {{ election.election_type }}</p>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <div class="item carousel-item active">
+                                            <p>No winners yet.</p>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <!-- Carousel controls -->
+                                <a class="carousel-control left carousel-control-prev" href="#testimonial_slider" data-slide="prev">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                                <a class="carousel-control right carousel-control-next" href="#testimonial_slider" data-slide="next">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end testimonial -->
+
+ 
+
+   </div>
+
+<!-- Active Elections -->
+<div class="white_shd full margin_bottom_30">
+    <div class="full graph_head">
+        <div class="heading1 margin_0">
+            <h2>Active Elections</h2>
+        </div>
+    </div>
+    <div class="full gallery_section_inner padding_infor_info">
+        <div class="row">
+            {% for election in active_elections %}
+                <div class="col-sm-6 col-md-4 mb-3">
+                    <a href="{% url 'voting_page' election.id %}" class="text-decoration-none">
+                        <div class="election_card card border-primary shadow-sm">
+                            <div class="card-body">
+                                <p><strong>Position:</strong> {{ election.get_election_type_display }}</p>
+                                <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
+                                <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>No active elections at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
 </div>
 

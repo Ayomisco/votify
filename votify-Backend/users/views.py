@@ -12,7 +12,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django import forms
 from django.views.generic.edit import UpdateView
 from django.urls import reverse_lazy
-
+from elections.models import Election, Candidate, Vote
+from results.models import Result, Winner
 # Set up logging
 logger = logging.getLogger(__name__)
 
@@ -27,17 +28,48 @@ class DashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
-        if user.is_staff:
-            context['admin_dashboard'] = True  # Admin-specific data
-        else:
-            context['student_dashboard'] = True  # Student-specific data
-        return context
 
+        # Fetch active elections
+        active_elections = Election.objects.filter(status='Active')
+
+        # Fetch winners
+        election_winners = []
+
+        for election in active_elections:
+            # Get results and winners
+            result = Result.objects.filter(election=election).first()
+            if result:
+                winners = Winner.objects.filter(result=result)
+                for winner in winners:
+                    candidate = winner.candidate
+                    election_winners.append({
+                        'name': candidate.full_name,
+                        'email': candidate.email,
+                        'image': candidate.image.url if candidate.image else None,
+                        'election': election.election_type
+                    })
+
+        context['election_winners'] = election_winners
+        context['active_elections'] = active_elections
+
+        # Determine dashboard type based on user
+        if user.is_staff:
+            context['admin_dashboard'] = True
+        else:
+            context['student_dashboard'] = True
+
+        return context
 
 class UserRegistrationView(View):
     def get(self, request):
         form = CustomUserCreationForm()
         return render(request, 'users/register.html', {'form': form})
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Redirect if already authenticated
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
         form = CustomUserCreationForm(request.POST)
@@ -66,6 +98,12 @@ class UserRegistrationView(View):
 class CustomLoginView(View):
     def get(self, request):
         return render(request, 'users/login.html')
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Redirect if already authenticated
+            return redirect('dashboard')
+        return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
         # Extract form data
@@ -105,6 +143,12 @@ class AdminLoginView(View):
     def get(self, request):
         form = AdminLoginForm()
         return render(request, 'users/admin_login.html', {'form': form})
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            # Redirect if already authenticated
+            return redirect('admin:index')
+        return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
         form = AdminLoginForm(request.POST)
