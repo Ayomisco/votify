@@ -1,6 +1,6 @@
-# admin.py
 from django.contrib import admin
 from django.utils.html import format_html
+from django.utils import timezone  # Add this import
 from .models import Election, Candidate, Vote
 from .forms import CandidateForm
 from django import forms
@@ -53,8 +53,8 @@ class ElectionAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if not change:
             # Logic for new elections
-            obj.created_at = timezone.now()
-        obj.updated_at = timezone.now()
+            obj.created_at = timezone.now()  # Use timezone now
+        obj.updated_at = timezone.now()  # Use timezone now
         super().save_model(request, obj, form, change)
 
     def election_type(self, obj):
