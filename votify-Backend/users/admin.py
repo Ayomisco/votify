@@ -10,7 +10,7 @@ class UserAdmin(BaseUserAdmin):
     form = CustomUserChangeForm
 
     # Define which fields to display on the admin interface
-    list_display = ('matriculation_number', 'full_name',  'user_type',
+    list_display = ('matriculation_number', 'email','full_name',  'user_type',
                     'department', 'school_level')
     list_filter = ('is_staff', 'is_superuser', 'user_type',
                    'department', 'school_level')
