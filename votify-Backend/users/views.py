@@ -202,7 +202,7 @@ class CustomAdminSignupView(View):
 
 class ProfileView(LoginRequiredMixin, TemplateView):
     """Displays the user's profile page with all information."""
-    template_name = 'profile.html'
+    template_name = 'users/profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
