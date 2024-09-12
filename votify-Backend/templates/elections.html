@@ -13,10 +13,10 @@
     </div>
 
     <!-- Filter by Election Type -->
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-12">
             <form method="get" class="form-inline">
-                <div class="form-group">
+                <div class="form-group mr-3">
                     <label for="election_type" class="mr-2">Filter by Election Type:</label>
                     <select name="election_type" id="election_type" class="form-control">
                         <option value="">All Elections</option>
@@ -25,36 +25,32 @@
                         {% endfor %}
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary ml-2">Filter</button>
+                <button type="submit" class="btn btn-primary">Filter</button>
             </form>
         </div>
     </div>
-    <br/> <br/>
 
     <!-- Active Elections -->
-    <div class="row column4 graph">
+    <div class="row mb-4">
         <div class="col-md-12">
-            <div class="white_shd full margin_bottom_30">
-                <div class="full graph_head">
-                    <div class="heading1 margin_0">
-                        <h2>Active Elections</h2>
-                    </div>
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Active Elections</h4>
                 </div>
-                <div class="full gallery_section_inner padding_infor_info">
+                <div class="card-body">
                     <div class="row">
                         {% for election in active_elections %}
-                            <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                <div class="column">
-                                    <a href="{% url 'voting_page' election.id %}">
-                                        <div class="election_card">
-                                            <h4>{{ election.title }}</h4>
+                            <div class="col-sm-6 col-md-4 mb-3">
+                                <a href="{% url 'voting_page' election.id %}" class="text-decoration-none">
+                                    <div class="election_card card border-primary shadow-sm">
+                                        <div class="card-body">
                                             <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
                                             <p><strong>Department:</strong> {{ election.department }}</p>
                                             <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
                                             <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
                                         </div>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             </div>
                         {% empty %}
                             <p>No active elections at the moment.</p>
@@ -66,29 +62,26 @@
     </div>
 
     <!-- Upcoming Elections -->
-    <div class="row column4 graph">
+    <div class="row mb-4">
         <div class="col-md-12">
-            <div class="white_shd full margin_bottom_30">
-                <div class="full graph_head">
-                    <div class="heading1 margin_0">
-                        <h2>Upcoming Elections</h2>
-                    </div>
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">Upcoming Elections</h4>
                 </div>
-                <div class="full gallery_section_inner padding_infor_info">
+                <div class="card-body">
                     <div class="row">
                         {% for election in upcoming_elections %}
-                            <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                <div class="column">
-                                    <a href="{% url 'voting_page' election.id %}">
-                                        <div class="election_card">
-                                            <h4>{{ election.title }}</h4>
+                            <div class="col-sm-6 col-md-4 mb-3">
+                                <a href="{% url 'voting_page' election.id %}" class="text-decoration-none">
+                                    <div class="election_card card border-warning shadow-sm">
+                                        <div class="card-body">
                                             <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
                                             <p><strong>Department:</strong> {{ election.department }}</p>
                                             <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
                                             <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
                                         </div>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             </div>
                         {% empty %}
                             <p>No upcoming elections at the moment.</p>
@@ -100,29 +93,26 @@
     </div>
 
     <!-- Finished Elections -->
-    <div class="row column4 graph">
+    <div class="row mb-4">
         <div class="col-md-12">
-            <div class="white_shd full margin_bottom_30">
-                <div class="full graph_head">
-                    <div class="heading1 margin_0">
-                        <h2>Finished Elections</h2>
-                    </div>
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Finished Elections</h4>
                 </div>
-                <div class="full gallery_section_inner padding_infor_info">
+                <div class="card-body">
                     <div class="row">
                         {% for election in finished_elections %}
-                            <div class="col-sm-4 col-md-3 margin_bottom_30">
-                                <div class="column">
-                                    <a href="{% url 'voting_page' election.id %}">
-                                        <div class="election_card">
-                                            <h4>{{ election.title }}</h4>
+                            <div class="col-sm-6 col-md-4 mb-3">
+                                <a href="{% url 'voting_page' election.id %}" class="text-decoration-none">
+                                    <div class="election_card card border-success shadow-sm">
+                                        <div class="card-body">
                                             <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
                                             <p><strong>Department:</strong> {{ election.department }}</p>
                                             <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
                                             <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
                                         </div>
-                                    </a>
-                                </div>
+                                    </div>
+                                </a>
                             </div>
                         {% empty %}
                             <p>No finished elections at the moment.</p>
@@ -133,4 +123,18 @@
         </div>
     </div>
 </div>
+
+<!-- Add CSS in base.html or a separate CSS file -->
+<style>
+.election_card {
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #ffffff;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+.election_card:hover {
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+</style>
 {% endblock %}

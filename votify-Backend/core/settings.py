@@ -147,24 +147,3 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Logging configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'cloudinary': {  # Optional: add Cloudinary logging
-            'handlers': ['console'],
-            'level': 'DEBUG',
-        },
-    },
-}

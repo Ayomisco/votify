@@ -5,14 +5,24 @@ from cloudinary.models import CloudinaryField
 
 
 class Election(models.Model):
-    GENERAL = 'General'
-    DEPARTMENT = 'Department'
-    COURSE = 'Course'
+    PRESIDENT = 'The president'
+    VICE_PRESIDENT = 'The vp'
+    TREASURER = 'The treasurer'
+    PRO = 'The Pro'
+    GENERAL_SECRETARY = 'The General secretary'
+    FINANCIAL_SECRETARY = 'The Financial Secretary'
+    WELFARE_OFFICER = 'The Welfare Officer'
+    ASSISTANT_GENERAL_SECRETARY = 'The assistant General secretary'
 
     ELECTION_TYPE_CHOICES = [
-        (GENERAL, 'General Election'),
-        (DEPARTMENT, 'Department Election'),
-        (COURSE, 'Course Election'),
+        (PRESIDENT, 'Presidential Election'),
+        (VICE_PRESIDENT, 'Vice President Election (follow southe)'),
+        (TREASURER, 'Treasurer Election'),
+        (PRO, 'PRO Election'),
+        (GENERAL_SECRETARY, 'General Secretary Election'),
+        (FINANCIAL_SECRETARY, 'Financial Secretary Election'),
+        (WELFARE_OFFICER, 'Welfare Officer Election'),
+        (ASSISTANT_GENERAL_SECRETARY, 'Assistant General Secretary Election'),
     ]
 
     STATUS_CHOICES = [
@@ -21,11 +31,10 @@ class Election(models.Model):
         ('Finished', 'Finished'),
     ]
 
-    title = models.CharField(max_length=255)
     election_type = models.CharField(
-        max_length=20,
+        max_length=200,
         choices=ELECTION_TYPE_CHOICES,
-        default=GENERAL
+        default=PRESIDENT
     )
     department = models.CharField(
         max_length=100,
@@ -58,7 +67,7 @@ class Election(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.title
+        return self.election_type
 
     def save(self, *args, **kwargs):
         if self.end_date < timezone.now():
@@ -77,16 +86,20 @@ class Election(models.Model):
 class Candidate(models.Model):
     ND1 = 'ND1'
     ND2 = 'ND2'
-    HNG1 = 'HNG1'
-    HNG2 = 'HNG2'
+    HNG1 = 'HND1'
+    HNG2 = 'HND2'
 
     SCHOOL_LEVEL_CHOICES = [
         (ND1, 'ND1'),
         (ND2, 'ND2'),
-        (HNG1, 'HNG1'),
-        (HNG2, 'HNG2'),
+        (HNG1, 'HND1'),
+        (HNG2, 'HND2'),
     ]
-
+    election = models.ForeignKey(
+        Election,
+        on_delete=models.CASCADE,
+        related_name='candidates'
+    )
     full_name = models.CharField(max_length=255)
     department = models.CharField(
         max_length=100,
@@ -112,22 +125,16 @@ class Candidate(models.Model):
         max_length=10,
         choices=SCHOOL_LEVEL_CHOICES
     )
-    position = models.CharField(max_length=255)
     about = models.TextField()
     manifesto = models.TextField()
     image = CloudinaryField('candidate/image', null=True, blank=True)
 
-    election = models.ForeignKey(
-        Election,
-        on_delete=models.CASCADE,
-        related_name='candidates'
-    )
-    votes_count = models.PositiveIntegerField(default=0)
+   
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.full_name} for {self.position}"
+        return f"{self.full_name} for {self.election}"
 
     class Meta:
         ordering = ['full_name']
