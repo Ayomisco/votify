@@ -118,8 +118,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Cloudinary settings
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dpy5zhquf',
-    'API_KEY': '372586339693315',
-    'API_SECRET': 'onC8Oyg7Je1HVGyUWXNd2qHEu_g',
+    'API_KEY': '426217848916545',
+    'API_SECRET': 't6V-o_AxlmuT9KduY4DqIlha3mY',
 }
 
 cloudinary.config(
