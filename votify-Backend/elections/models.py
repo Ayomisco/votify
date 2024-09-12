@@ -36,26 +36,7 @@ class Election(models.Model):
         choices=ELECTION_TYPE_CHOICES,
         default=PRESIDENT
     )
-    department = models.CharField(
-        max_length=100,
-        choices=[
-            ('Marine Engineering', 'Marine Engineering'),
-            ('Nautical Science', 'Nautical Science'),
-            ('Maritime Transport and Business Studies',
-             'Maritime Transport and Business Studies'),
-            ('Computer Science', 'Computer Science'),
-            ('Fisheries Technology', 'Fisheries Technology'),
-            ('Mechanical Engineering', 'Mechanical Engineering'),
-            ('Science Laboratory Technology', 'Science Laboratory Technology'),
-            ('Industrial and Labour Relations', 'Industrial and Labour Relations'),
-            ('Oceanography and Fisheries Science',
-             'Oceanography and Fisheries Science'),
-            ('Hydrology and Water Resources Management',
-             'Hydrology and Water Resources Management'),
-        ],
-        null=True,
-        blank=True
-    )
+ 
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     status = models.CharField(

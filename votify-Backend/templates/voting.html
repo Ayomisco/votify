@@ -13,7 +13,7 @@
     </div>
 
     <!-- Countdown Timer -->
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-12">
             <div class="countdown-container center col">
                 <div class="countdown-box">
@@ -37,7 +37,7 @@
     </div>
 
     <!-- Candidates List -->
-    <div class="row column1">
+    <div class="row">
         <div class="col-md-12">
             <div class="white_shd full margin_bottom_30">
                 <div class="full graph_head">
@@ -48,7 +48,7 @@
                 <div class="full price_table padding_infor_info">
                     <div class="row">
                         {% for candidate in election.candidates.all %}
-                            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 profile_details margin_bottom_30">
+                            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 profile_details mb-3">
                                 <div class="card">
                                     <div class="card h-100 text-center border-0">
                                         <div class="card-body">
@@ -56,21 +56,20 @@
                                                 alt="Candidate Image">
                                             <h5 class="card-title fw-bold">{{ candidate.full_name }}</h5>
                                             <h6 class="card-subtitle mb-2 text-muted">Running for: <a href="#"
-                                                class="text-primary text-decoration-none fw-bold">{{ candidate.position }}</a></h6>
+                                                class="text-primary text-decoration-none fw-bold">{{ candidate.election_type }}</a></h6>
                                             <h6 class="card-subtitle mb-2 text-muted">Department: <a href="#"
                                                 class="text-primary text-decoration-none fw-bold">{{ candidate.department }}</a></h6>
                                             <p class="card-text">{{ candidate.about|slice:":150" }}...</p>
                                         </div>
-                                        <div class="card-footer border-0 bg-white">
+                                        <div class="card-footer border-0 bg-white d-flex justify-content-between">
                                             <!-- Button to View Manifesto -->
-                                            <button data-toggle="modal" data-target="#manifestoModal-{{ candidate.id }}" type="button" class="btn btn-primary me-2">View Manifesto</button>
+                                            <button data-toggle="modal" data-target="#manifestoModal-{{ candidate.id }}" type="button" class="btn btn-primary">View Manifesto</button>
                                             
                                             <!-- Button to Vote -->
-                                           <form method="post" action="{% url 'vote' election.id candidate.id %}">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Vote</button>
-</form>
-
+                                            <form method="post" action="{% url 'vote' election.id candidate.id %}" class="d-inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-primary">Vote</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -93,12 +92,29 @@
                                     </div>
                                 </div>
                             </div>
-
                         {% empty %}
                             <p>No candidates available for this election.</p>
                         {% endfor %}
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Your vote has been successfully cast!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -128,9 +144,14 @@
                 document.getElementById('hours').innerText = "00";
                 document.getElementById('minutes').innerText = "00";
                 document.getElementById('seconds').innerText = "00";
-                // Optionally display a message or change the countdown to "EXPIRED"
             }
         }, 1000);
+
+        // Display success modal if there is a URL parameter indicating successful vote
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('voted') === 'true') {
+            new bootstrap.Modal(document.getElementById('successModal')).show();
+        }
     });
 </script>
 

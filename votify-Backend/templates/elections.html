@@ -44,8 +44,7 @@
                                 <a href="{% url 'voting_page' election.id %}" class="text-decoration-none">
                                     <div class="election_card card border-primary shadow-sm">
                                         <div class="card-body">
-                                            <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
-                                            <p><strong>Department:</strong> {{ election.department }}</p>
+                                            <p><strong>Position:</strong> {{ election.get_election_type_display }}</p>
                                             <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
                                             <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
                                         </div>
@@ -75,8 +74,7 @@
                                 <a href="{% url 'voting_page' election.id %}" class="text-decoration-none">
                                     <div class="election_card card border-warning shadow-sm">
                                         <div class="card-body">
-                                            <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
-                                            <p><strong>Department:</strong> {{ election.department }}</p>
+                                            <p><strong>Position:</strong> {{ election.get_election_type_display }}</p>
                                             <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
                                             <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
                                         </div>
@@ -107,7 +105,7 @@
                                     <div class="election_card card border-success shadow-sm">
                                         <div class="card-body">
                                             <p><strong>Type:</strong> {{ election.get_election_type_display }}</p>
-                                            <p><strong>Department:</strong> {{ election.department }}</p>
+                                            <p><strong>Position:</strong> {{ election.department }}</p>
                                             <p><strong>Start Date:</strong> {{ election.start_date|date:"d M Y H:i" }}</p>
                                             <p><strong>End Date:</strong> {{ election.end_date|date:"d M Y H:i" }}</p>
                                         </div>

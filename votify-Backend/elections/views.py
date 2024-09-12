@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.contrib import messages
 from .models import Election, Candidate, Vote
 from django.shortcuts import render, get_object_or_404, redirect
@@ -49,7 +50,6 @@ def voting_page(request, election_id):
 
 
 def vote(request, election_id, candidate_id):
-    # Fetch the candidate and associated election
     candidate = get_object_or_404(Candidate, id=candidate_id)
     election = get_object_or_404(Election, id=election_id)
 
@@ -66,7 +66,8 @@ def vote(request, election_id, candidate_id):
                 # Increment vote count if new vote is created
                 candidate.votes_count += 1
                 candidate.save()
-                messages.success(request, "Your vote has been recorded.")
+                # Redirect with query parameter to show success modal
+                return redirect('voting_page', election_id=election.id) + '?voted=true'
             else:
                 messages.error(
                     request, "You have already voted in this election.")
@@ -74,5 +75,4 @@ def vote(request, election_id, candidate_id):
             messages.error(
                 request, "Voting is not allowed outside of the election period.")
 
-    # Redirect back to the voting page for the election
     return redirect('voting_page', election_id=election.id)

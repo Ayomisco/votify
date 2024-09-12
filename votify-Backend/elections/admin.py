@@ -8,14 +8,14 @@ from django.core.files.images import get_image_dimensions
 class CandidateInline(admin.TabularInline):
     model = Candidate
     extra = 1
-    fields = ['full_name', 'department',
+    fields = ['full_name', 
               'school_level', 'about', 'manifesto', 'image']
     readonly_fields = ['created_at', 'updated_at']
 
 
 @admin.register(Election)
 class ElectionAdmin(admin.ModelAdmin):
-    list_display = ('election_type', 'department', 'start_date',
+    list_display = ('election_type',  'start_date',
                     'end_date', 'status', 'created_at', 'updated_at')
     list_filter = ('election_type', 'department',
                    'status', 'start_date', 'end_date')
