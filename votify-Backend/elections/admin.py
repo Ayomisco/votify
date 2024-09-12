@@ -17,7 +17,7 @@ class CandidateInline(admin.TabularInline):
 class ElectionAdmin(admin.ModelAdmin):
     list_display = ('election_type',  'start_date',
                     'end_date', 'status', 'created_at', 'updated_at')
-    list_filter = ('election_type', 'department',
+    list_filter = ('election_type', 
                    'status', 'start_date', 'end_date')
     search_fields = ('election_type',)
     ordering = ('-start_date',)
