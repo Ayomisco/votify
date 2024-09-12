@@ -75,11 +75,12 @@
                         <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span></a>
                     </li>
                     <li><a href="{% url 'election_list' %} "><i class="fa fa-clock-o orange_color"></i> <span>Elections</span></a></li>
-                    <li>
+                   <!-- <li>
                         <a href="#"><i class="fa fa-diamond purple_color"></i> <span>Nominees</span></a>
                     </li>
                     <li><a href="#"><i class="fa fa-table purple_color2"></i> <span>Voting Results</span></a></li>
-                    <li><a href="{% url 'profile' %}"><i class="fa fa-cog yellow_color"></i> <span>My Profile</span></a></li>
+                   
+                   --> <li><a href="{% url 'profile' %}"><i class="fa fa-cog yellow_color"></i> <span>My Profile</span></a></li>
                     
                 </ul>
             </div>
@@ -105,7 +106,7 @@
                             src="{% if user_profile_pic %}{{ user_profile_pic.url }}{% else %} https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=  {% endif %}" 
                             alt="Profile Picture" /> <span class="name_user">{{ user_full_name }}</span></a>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">My Profile</a>
+                                            <a class="dropdown-item" href="{% url 'profile' %}">My Profile</a>
                                             <form action="{% url 'logout' %}" method="post" style="display: inline;">
                                                 {% csrf_token %}
                                                 <button type="submit" class="dropdown-item"><span style="color:black;">Log Out</span> <i class="fa fa-sign-out"></i></button>
