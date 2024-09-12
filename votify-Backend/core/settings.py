@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'audit_logs',
     'cloudinary',
     'cloudinary_storage',
+    'results'
 ]
 
 MIDDLEWARE = [

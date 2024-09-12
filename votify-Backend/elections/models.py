@@ -16,7 +16,7 @@ class Election(models.Model):
 
     ELECTION_TYPE_CHOICES = [
         (PRESIDENT, 'Presidential Election'),
-        (VICE_PRESIDENT, 'Vice President Election (follow southe)'),
+        (VICE_PRESIDENT, 'Vice President Election'),
         (TREASURER, 'Treasurer Election'),
         (PRO, 'PRO Election'),
         (GENERAL_SECRETARY, 'General Secretary Election'),
@@ -110,12 +110,26 @@ class Candidate(models.Model):
     manifesto = models.TextField()
     image = CloudinaryField('candidate/image', null=True, blank=True)
 
-   
+    votes_count = models.PositiveIntegerField(
+        default=0)  # Track votes per candidate
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.full_name} for {self.election}"
+
+    # Increment votes count
+    def increment_vote(self):
+        self.votes_count += 1
+        self.save()
+
+    # Decrement votes count
+    def decrement_vote(self):
+        if self.votes_count > 0:
+            self.votes_count -= 1
+        self.save()
+
 
     class Meta:
         ordering = ['full_name']
@@ -151,3 +165,9 @@ class Vote(models.Model):
 
     def __str__(self):
         return f"{self.user} voted for {self.candidate} in {self.election}"
+
+    # Track today's votes for an election
+    @classmethod
+    def today_votes(cls, election):
+        today = timezone.now().date()
+        return cls.objects.filter(election=election, created_at__date=today).count()
