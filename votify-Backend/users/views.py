@@ -22,6 +22,31 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 
 
+def custom_404(request, exception=None):
+    context = {}
+    user = request.user
+
+    if user.is_staff:
+        context['admin_dashboard'] = True
+    else:
+        context['student_dashboard'] = True
+
+    return render(request, '404.html', context, status=404)
+
+
+def custom_500(request):
+    context = {}
+    user = request.user
+
+    if user.is_staff:
+        context['admin_dashboard'] = True
+    else:
+        context['student_dashboard'] = True
+
+    return render(request, '500.html', context, status=500)
+
+    
+
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'
 
