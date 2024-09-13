@@ -1,0 +1,13 @@
+
+# *__pycache__
+# .env
+db.sqlite3
+# *.json
+venv
+# image
+__pycache__/
+#terraform
+dedundant
+#gunicorn
+#scripts
+logs
