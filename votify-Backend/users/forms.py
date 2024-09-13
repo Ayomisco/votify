@@ -17,7 +17,6 @@ class CustomUserChangeForm(BaseUserChangeForm):
         fields = ('email', 'full_name', 'department', 'profile_pic', 'user_type',
                   'is_staff', 'is_superuser', 'school_level', 'matriculation_number',)
 
-# Custom User Creation Form
 
 
 class CustomUserCreationForm(forms.ModelForm):

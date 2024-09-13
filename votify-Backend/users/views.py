@@ -24,9 +24,9 @@ class IndexView(TemplateView):
 
 def custom_404(request, exception=None):
     context = {}
-    user = request.user
+    user = getattr(request, 'user', None)
 
-    if user.is_staff:
+    if user and user.is_authenticated and user.is_staff:
         context['admin_dashboard'] = True
     else:
         context['student_dashboard'] = True
@@ -36,16 +36,16 @@ def custom_404(request, exception=None):
 
 def custom_500(request):
     context = {}
-    user = request.user
+    user = getattr(request, 'user', None)
 
-    if user.is_staff:
+    if user and user.is_authenticated and user.is_staff:
         context['admin_dashboard'] = True
     else:
         context['student_dashboard'] = True
 
     return render(request, '500.html', context, status=500)
 
-    
+
 
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'dashboard.html'

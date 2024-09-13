@@ -20,6 +20,12 @@ from users.views import IndexView, DashboardView
 from django.conf.urls.static import static
 from django.conf import settings
 
+from django.conf.urls import handler404, handler500
+from users.views import custom_404, custom_500
+
+handler404 = 'users.views.custom_404'
+handler500 = 'users.views.custom_500'
+
 urlpatterns = [
     path('user/', include('users.urls')),
     path('', include('elections.urls')),

@@ -2,11 +2,7 @@ from django.urls import path
 from .views import UserRegistrationView, CustomLoginView, IndexView,  CustomAdminSignupView, ProfileView, EditProfileView
 from django.contrib.auth.views import LogoutView
 
-from django.conf.urls import handler404, handler500
-from .views import custom_404, custom_500
 
-handler404 = custom_404
-handler500 = custom_500
 
 urlpatterns = [
 

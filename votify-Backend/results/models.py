@@ -1,14 +1,13 @@
 from django.db import models
 from django.utils import timezone
-from elections.models import Election, Candidate
-from elections.models import Vote  # Make sure to import the Vote model
+from elections.models import Election, Candidate, Vote
 
 
 class Result(models.Model):
     election = models.OneToOneField(
         Election, on_delete=models.CASCADE, related_name='result')
-    total_votes = models.PositiveIntegerField(
-        default=0)  # Total votes in the election
+    total_votes = models.PositiveIntegerField(default=0)
+    announced_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -26,17 +25,25 @@ class Result(models.Model):
                 candidate=candidate, election=self.election).count()
             candidate.votes_count = vote_count
             candidate.save()
+
         self.calculate_total_votes()
+
+        # Automatically create Winner entries
+        winners = self.get_winner()
+        # Remove old winners if any
+        Winner.objects.filter(result=self).delete()
+        for winner in winners:
+            Winner.objects.create(result=self, candidate=winner)
 
     def get_winner(self):
         candidates = Candidate.objects.filter(election=self.election)
+        if not candidates:
+            return []
         max_votes = max(
-            candidates, key=lambda candidate: candidate.votes_count, default=None)
-        if max_votes:
-            winners = [
-                candidate for candidate in candidates if candidate.votes_count == max_votes.votes_count]
-            return winners
-        return []
+            candidates, key=lambda candidate: candidate.votes_count)
+        winners = [
+            candidate for candidate in candidates if candidate.votes_count == max_votes.votes_count]
+        return winners
 
     class Meta:
         verbose_name = 'Result'

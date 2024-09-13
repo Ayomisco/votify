@@ -62,7 +62,7 @@ class Election(models.Model):
     class Meta:
         ordering = ['-start_date']
         verbose_name = 'Election'
-        verbose_name_plural = 'Elections'
+        verbose_name_plural = '     Elections'
 
 class Candidate(models.Model):
     ND1 = 'ND1'
@@ -81,6 +81,8 @@ class Candidate(models.Model):
         on_delete=models.CASCADE,
         related_name='candidates'
     )
+    matriculation_number = models.CharField(
+        max_length=255, blank=True, null=True,  unique=True)
     full_name = models.CharField(max_length=255)
     department = models.CharField(
         max_length=100,
@@ -119,16 +121,6 @@ class Candidate(models.Model):
     def __str__(self):
         return f"{self.full_name} for {self.election}"
 
-    # Increment votes count
-    def increment_vote(self):
-        self.votes_count += 1
-        self.save()
-
-    # Decrement votes count
-    def decrement_vote(self):
-        if self.votes_count > 0:
-            self.votes_count -= 1
-        self.save()
 
 
     class Meta:
@@ -156,7 +148,7 @@ class Vote(models.Model):
         on_delete=models.CASCADE,
         related_name='votes'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    voted_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('user', 'election')
@@ -170,4 +162,4 @@ class Vote(models.Model):
     @classmethod
     def today_votes(cls, election):
         today = timezone.now().date()
-        return cls.objects.filter(election=election, created_at__date=today).count()
+        return cls.objects.filter(election=election, voted_at__date=today).count()
