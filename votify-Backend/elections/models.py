@@ -132,6 +132,8 @@ class Candidate(models.Model):
         ]
 
 
+# elections/models.py
+
 class Vote(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -140,12 +142,15 @@ class Vote(models.Model):
     )
     candidate = models.ForeignKey(
         Candidate,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # Ensure this is correctly set
+        null=True,  # Make the field nullable
+
         related_name='votes'
     )
     election = models.ForeignKey(
         Election,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,  # Ensure this is correctly set
+        null=True,  # Make the field nullable
         related_name='votes'
     )
     voted_at = models.DateTimeField(auto_now_add=True)

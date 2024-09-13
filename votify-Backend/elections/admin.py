@@ -23,14 +23,27 @@ class ElectionForm(forms.ModelForm):
         return cleaned_data
 
 
-# Candidate Inline to Display in ElectionAdmin
+
+
 class CandidateInline(admin.TabularInline):
     model = Candidate
     extra = 0  # Don't add extra blank candidates
     fields = ('full_name', 'matriculation_number', 'votes_count')
-    readonly_fields = ('votes_count',)  # Display vote count
+    readonly_fields = ('full_name', 'matriculation_number',
+                       'votes_count')  # Make fields read-only
     can_delete = False  # Disable deletion via inline
+    min_num = 0  # Do not require any candidates to be present
+    max_num = None  # No limit to the number of candidates
 
+
+    def has_add_permission(self, request, obj):
+        return False  # Disable adding new candidates
+
+    def has_change_permission(self, request, obj=None):
+        return False  # Disable editing existing candidates
+
+    def has_delete_permission(self, request, obj=None):
+        return False  # Disable deleting candidates
 
 # Election Admin (Customized List and Candidate Inline)
 @admin.register(Election)

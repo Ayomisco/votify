@@ -18,11 +18,13 @@ class Result(models.Model):
         self.total_votes = Vote.objects.filter(election=self.election).count()
         self.save()
 
+
     def calculate_results(self):
         candidates = Candidate.objects.filter(election=self.election)
         for candidate in candidates:
             vote_count = Vote.objects.filter(
-                candidate=candidate, election=self.election).count()
+                candidate=candidate, election=self.election
+            ).count()
             candidate.votes_count = vote_count
             candidate.save()
 
@@ -34,7 +36,7 @@ class Result(models.Model):
         Winner.objects.filter(result=self).delete()
         for winner in winners:
             Winner.objects.create(result=self, candidate=winner)
-
+            
     def get_winner(self):
         candidates = Candidate.objects.filter(election=self.election)
         if not candidates:
@@ -50,10 +52,17 @@ class Result(models.Model):
         verbose_name_plural = 'Results'
 
 
+
 class Winner(models.Model):
     result = models.ForeignKey(
-        Result, on_delete=models.CASCADE, related_name='winners')
-    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+        Result, on_delete=models.CASCADE, related_name='winners'
+    )
+    candidate = models.ForeignKey(
+        Candidate,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='winners'
+    )  # Changed related_name to 'winners' for clarity
     announced_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
