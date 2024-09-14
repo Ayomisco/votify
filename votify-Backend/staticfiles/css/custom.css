@@ -3,3 +3,14 @@
 -------------------------------------------------------------------*/
 
 /** ADD YOUR AWESOME CODES HERE **/
+.winner {
+    background-color: gold;
+}
+
+.runner-up {
+    background-color: silver;
+}
+
+.second-runner-up {
+    background-color: bronze;
+}

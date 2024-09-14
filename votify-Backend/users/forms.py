@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import SetPasswordForm
 import logging
 from django import forms
 from django.contrib.auth import get_user_model, authenticate
@@ -56,12 +58,7 @@ class CustomUserCreationForm(forms.ModelForm):
             if password and confirm_password and password != confirm_password:
                 raise ValidationError("Passwords do not match")
 
-            matriculation_number = cleaned_data.get('matriculation_number')
-            if matriculation_number:
-                matriculation_number = matriculation_number.strip().lower()
-                if User.objects.filter(matriculation_number__iexact=matriculation_number).exists():
-                    raise ValidationError(
-                        "Matriculation number is already in use.")
+    
 
         except ValidationError as e:
             logger.error(f"Validation error: {e}")
@@ -72,6 +69,18 @@ class CustomUserCreationForm(forms.ModelForm):
                 "An unexpected error occurred. Please try again later.")
 
         return cleaned_data
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if get_user_model().objects.filter(email=email).exists():
+            raise ValidationError("Email address is already in use.")
+        return email
+
+    def clean_matriculation_number(self):
+        matriculation_number = self.cleaned_data.get('matriculation_number')
+        if get_user_model().objects.filter(matriculation_number=matriculation_number).exists():
+            raise ValidationError("Matriculation number is already in use.")
+        return matriculation_number
 
     def save(self, commit=True):
         try:
@@ -118,14 +127,13 @@ class CustomAdminCreationForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
-        try:
-            if get_user_model().objects.filter(email=email).exists():
-                raise ValidationError("Email address is already in use.")
-        except Exception as e:
-            logger.error(f"Error checking email uniqueness: {e}")
-            raise ValidationError("An error occurred. Please try again later.")
+        logger.debug(f"Checking email: {email}")
+        if get_user_model().objects.filter(email=email).exists():
+            raise ValidationError("Email address is already in use.")
         return email
 
+   
+    
     def save(self, commit=True):
         try:
             user = super().save(commit=False)
@@ -180,6 +188,8 @@ class AdminLoginForm(AuthenticationForm):
     email = forms.EmailField(label="Email")
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
 
+
+
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
@@ -220,3 +230,49 @@ class UserProfileForm(forms.ModelForm):
             'school_level': forms.Select(attrs={'class': 'form-control'}),
             'profile_pic': forms.FileInput(attrs={'class': 'form-control'}),
         }
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(
+        label="Email Address",
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter your email address'
+        }),
+        help_text="We'll send you a link to reset your password."
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "No user with this email address found."
+            )
+        return email
+
+
+class SetNewPasswordForm(forms.Form):
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Enter new password'}))
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Confirm new password'}))
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)  # Remove user from kwargs
+        super().__init__(*args, **kwargs)  # Call the parent class’s init method
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("Passwords do not match")
+
+        return cleaned_data
+
+    def save(self):
+        password = self.cleaned_data["password1"]
+        if self.user:
+            self.user.set_password(password)
+            self.user.save()

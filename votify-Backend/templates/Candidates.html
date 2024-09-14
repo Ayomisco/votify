@@ -1,89 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-   <head>
-      <div id="header_1"></div>
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Candidates List{% endblock %}
+
+<style>
 
 
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Candidates List</h2>
 
-   </head>
-   <body class="dashboard dashboard_1">
-     
-      <div class="full_container">
-         <div class="inner_container">
-            <!-- Sidebar  -->
-            <nav id="sidebar"></nav>
+    <!-- Filter by Election Type -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="electionFilter">Filter by Election:</label>
+                <select id="electionFilter" class="form-control shadow-sm">
+                    {% for election in elections %}
+                        <option value="{{ election.election_type }}">{{ election.election_type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
 
-            <!-- end sidebar -->
-            <!-- right content -->
-            <div id="content">
-               <!-- topbar -->
+    <!-- Candidates Table -->
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <table id="candidateTable" class="table table-bordered table-hover shadow-sm">
+                <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Department</th>
+                        <th>Votes Count</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for candidate in candidates %}
+                        <tr class="
+                            {% if forloop.first %}winner
+                            {% elif forloop.counter == 2 %}runner-up
+                            {% elif forloop.counter == 3 %}second-runner-up
+                            {% elif candidate.votes_count == 0 %}no-votes
+                            {% endif %}
+                        ">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ candidate.full_name }}</td>
+                            <td>{{ candidate.department }}</td>
+                            <td>{{ candidate.votes_count }}</td>
+                            <td>
+                                {% if forloop.first %}
+                                    Winner
+                                {% elif forloop.counter == 2 %}
+                                    Runner-Up
+                                {% elif forloop.counter == 3 %}
+                                    Second Runner-Up
+                                {% elif candidate.votes_count == 0 %}
+                                    No Votes Yet
+                                {% else %}
+                                    {{ forloop.counter }}th Place
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No candidates available</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-               <div id="topbar"></div>
+    <!-- Spinner while loading -->
+    <div id="loadingSpinner" class="text-center" style="display:none;">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
 
-               <!-- end topbar -->
-                     
-               <!-- dashboard inner -->
-
-               <div class="midde_cont">
-                  <div class="container-fluid">
-                     <div class="row column_title">
-                        <div class="col-md-12">
-                           <div class="page_title">
-                              <h2>Vote Result</h2>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="row column1">
-                        <div class="col-md-12">
-                           <div class="white_shd full margin_bottom_30">
-                              
-                              <div class="table_section padding_infor_info">
-                                 <div class="table-responsive-sm">
-                                    <table class="table">
-                                       <thead class="text-dark">
-                                          <tr>
-                                             <th>#</th>
-                                             <th>Firstname</th>
-                                             <th>Lastname</th>
-                                             
-                                             <th>Dept</th>
-                                             <th>No. of Vote</th>
-                                             <th>Position</th>
-                                          </tr>
-                                       </thead>
-                                       <tbody>
-                                          <tr class="mt-2">
-                                             <td>1</td>
-                                             <td>Anna</td>
-                                             <td>Pitt</td>
-                                             <td>35</td>
-                                             <td>34</td>
-                                             <td><span  class=" btn btn-success centered p-lg-1">Winner</span></td>
-                                             
-                                          </tr>
-                                       </tbody>
-                                    </table>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        
-                  </div>
-
-                  <!-- footer -->
-                     <div id="footer"></div>
-                  <!-- footer -->
-
-               </div>
-
-               <!-- end dashboard inner -->
-
-      </div>
-      </div>
-      </div>
-
-      <div id="main_footer"></div>
-
-  <script src="js/include.js"></script>
-   </body>
-</html>
+{% block extra_js %}
+<script>
+   
+</script>
+{% endblock %}

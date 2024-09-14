@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #d9534f;
+        }
+        p {
+            margin: 0 0 10px;
+        }
+        .footer {
+            font-size: 0.8em;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>New User Signup Notification</h1>
+        <p>A new user has just signed up!</p>
+        <p><strong>Name:</strong> {{ full_name }}<br>
+           <strong>Matriculation Number:</strong> {{ matriculation_number }}<br>
+           <strong>Email:</strong> {{ email }}<br>
+           <strong>User Type:</strong> {{ user_type }}</p>
+        <p>Please take the necessary actions if required.</p>
+        <p class="footer">Best regards,<br>FCFMT Voting System Team</p>
+    </div>
+</body>
+</html>

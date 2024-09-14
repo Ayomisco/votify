@@ -8,10 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- mobile metas -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <!-- site metas -->
     <title>{% block title %}Votify - Securing Your Voice, Empowering Your Choice{% endblock %}</title>
-
     <meta name="keywords" content="">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -35,8 +33,31 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-        {% block extra_css %}{% endblock %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
+    {% block extra_css %}{% endblock %}
+
+<style>
+    .winner {
+        background-color: gold !important;
+        color: black; /* Text color for visibility */
+    }
+    .runner-up {
+        background-color: brown !important;
+        color: black;
+    }
+    .second-runner-up {
+        background-color: #7b4c4c !important; /* Bronze color */
+        color: black;
+    }
+    .no-votes {
+        background-color: lightgrey !important;
+        color: black;
+        border: none;
+
+    }
+
+</style>
 </head>
 <body class="dashboard dashboard_1">
 
@@ -54,17 +75,11 @@
                 <div class="sidebar_user_info">
                     <div class="icon_setting"></div>
                     <div class="user_profle_side">
-               <!--    <div class="user_img">
-                        <img class="img-responsive rounded-circle" 
-                            src="{% if user_profile_pic %}{{ user_profile_pic.url }}{% else %} https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI= {% endif %}" 
-                            alt="Profile Picture" />
-                    </div>--> 
-                    <div class="user_info">
-                        <h6>{{ user_full_name }}</h6>
-                        <p><span class="online_animation"></span> Online</p>
-                        <p>{{ user_email }}</p>
-                    </div>
-
+                        <div class="user_info">
+                            <h6>{{ user_full_name }}</h6>
+                            <p><span class="online_animation"></span> Online</p>
+                            <p>{{ user_email }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,14 +90,19 @@
                         <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard yellow_color"></i> <span>Dashboard</span></a>
                     </li>
                     <li><a href="{% url 'election_list' %} "><i class="fa fa-clock-o orange_color"></i> <span>Elections</span></a></li>
-                   <!-- <li>
-                        <a href="#"><i class="fa fa-diamond purple_color"></i> <span>Nominees</span></a>
-                    </li>
-                    <li><a href="#"><i class="fa fa-table purple_color2"></i> <span>Voting Results</span></a></li>
-                   
-                   --> <li><a href="{% url 'profile' %}"><i class="fa fa-cog yellow_color"></i> <span>My Profile</span></a></li>
-                    
+                     <li><a href="{% url 'candidates_page' %} "><i class="fa fa-briefcase blue1_color"></i> <span>Candidates List</span></a></li>
+
+                    <li><a href="{% url 'profile' %}"><i class="fa fa-cog yellow_color"></i> <span>My Profile</span></a></li>
                 </ul>
+
+                <ul class="list-unstyled components">
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn logout-btn "><i class="fa fa-sign-out red_color" style=" margin-left: 15px; margin-right: 20px;"></i><span class="white_color" style="color: white !important; margin-right: 20px;"> Log Out </span> </button>
+                </form>
+            </li>
+            </ul>
             </div>
             <!-- end sidebar -->
         </nav>
@@ -129,8 +149,7 @@
                 <!-- footer -->
                 <div class="container-fluid">
                     <div class="footer">
-                        <p>Copyright © 2024 Votify. Design and Developed by Mayorkun. All rights reserved.<br><br>
-                        </p>
+                        <p>Copyright © 2024 Votify. Design and Developed by Mayorkun. All rights reserved.<br><br></p>
                     </div>
                 </div>
                 <!-- end footer -->
@@ -143,8 +162,13 @@
 <div id="main_footer"></div>
 
 <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script src="{% static 'js/jquery.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="{% static 'js/popper.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 <!-- wow animation -->
 <script src="{% static 'js/animate.js' %}"></script>
 <!-- select country -->
@@ -172,9 +196,11 @@
 </script>
 
 <!-- custom js -->
+<script src="{% static 'js/candidate_filter.js' %}"></script>
+
 <script src="{% static 'js/custom.js' %}"></script>
 <script src="{% static 'js/chart_custom_style1.js' %}"></script>
-    {% block extra_js %}{% endblock %}
+{% block extra_js %}{% endblock %}
 
 </body>
 </html>

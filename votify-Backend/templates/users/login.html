@@ -54,9 +54,6 @@
                                         </ul>
                                     </div>
                                 {% endif %}
-
-                                
-                                                      
                         <div class="mb-3">
                            <label for="matricNumber" class="form-label">Matriculation Number</label>
                            <input type="text" name="matriculation_number" id="matricNumber" required class="form-control" value="{{ form.matriculation_number.value }}" placeholder="YYYY/DEPT/Year/###">
@@ -65,9 +62,17 @@
                            <label for="password" class="form-label">Password</label>
                            <input type="password" name="password" id="password" class="form-control" required>
                         </div>
-                        <div class="mt-3 text-center">
-                           <span class="form-check-label">Don't have an account? <a href="{% url 'register' %}" style="color: red;">Register</a></span>
+                        <div class="d-flex justify-content-between mt-3">
+                           <div>
+                              <a href="{% url 'password_reset_request' %}" style="color: blue;">Forgot Password?</a>
+                           </div>
+                           <div>
+                              <span class="form-check-label">Don't have an account? 
+                                 <a href="{% url 'register' %}" style="color: red;">Register</a>
+                              </span>
+                           </div>
                         </div>
+                        <br>
                         <div class="d-flex mb-5">
                            <button type="submit" class="btn btn-primary">Login</button>
                         </div>
@@ -80,23 +85,20 @@
    </div>
 
     {% if messages %}
-                            <script>
-                                {% for message in messages %}
-                                    Swal.fire({
-                                        icon: '{{ message.tags }}',
-                                        title: '{{ message.message }}',
-                                        showConfirmButton: true
-                                    });
-                                {% endfor %}
-                            </script>
+        <script>
+            {% for message in messages %}
+                Swal.fire({
+                    icon: '{{ message.tags }}',
+                    title: '{{ message.message }}',
+                    showConfirmButton: true
+                });
+            {% endfor %}
+        </script>
     {% endif %}
-
 
    <!-- jQuery -->
    <script src="{% static 'js/jquery.min.js' %}"></script>
    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  
-   
 </body>
 
 </html>

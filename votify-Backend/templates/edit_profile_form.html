@@ -12,3 +12,22 @@
         {% endfor %}
     </div>
 {% endfor %}
+
+<!-- Include SweetAlert2 script -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Script to handle alert messages -->
+<script>
+    {% if messages %}
+        {% for message in messages %}
+            var iconType = '{{ message.tags }}' === 'success' ? 'success' : 'error';
+            Swal.fire({
+                icon: iconType,
+                title: iconType === 'success' ? 'Success' : 'Error',
+                text: '{{ message.message }}',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        {% endfor %}
+    {% endif %}
+</script>

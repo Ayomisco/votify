@@ -3,6 +3,10 @@ from django.conf import settings
 from django.utils import timezone
 from cloudinary.models import CloudinaryField
 
+from django.core.files.storage import FileSystemStorage
+
+# Define local file storage
+fs = FileSystemStorage(location='media/candidates_images')
 
 class Election(models.Model):
     PRESIDENT = 'The president'
@@ -110,7 +114,8 @@ class Candidate(models.Model):
     )
     about = models.TextField()
     manifesto = models.TextField()
-    image = CloudinaryField('candidate/image', null=True, blank=True)
+    image = models.ImageField(
+        upload_to='candidates_images/', null=True, blank=True)
 
     votes_count = models.PositiveIntegerField(
         default=0)  # Track votes per candidate

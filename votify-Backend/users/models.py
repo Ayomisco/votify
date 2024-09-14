@@ -1,6 +1,9 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin, AbstractBaseUser, BaseUserManager
 from django.utils import timezone
+from django.utils.crypto import get_random_string
+from uuid import uuid4
 
 
 import re
@@ -38,6 +41,8 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Superuser must have is_staff=True.')
 
         return self.create_user(email=email, full_name=full_name, password=password, **extra_fields)
+
+
 
     def validate_email_format(self, email):
         """Ensure email is in the format name.surname@fcfmt.edu.ng."""
@@ -148,3 +153,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.full_name} ({self.matriculation_number})"
+
+
+class PasswordResetToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=64, default=uuid4().hex, unique=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    is_used = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Token for {self.user.email} - {self.token}"
+
+    def is_expired(self):
+        # Token is valid for 1 hour
+        return (timezone.now() - self.created_at) > timezone.timedelta(hours=1)
+    
+    def generate_token(self):
+        self.token = uuid4().hex
+        self.save()
+        return self.token

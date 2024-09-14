@@ -1,3 +1,11 @@
+from .helpers.emails import reset_password, send_password_reset_confirmation_email
+from .forms import PasswordResetRequestForm, SetNewPasswordForm
+from .models import User, PasswordResetToken
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes, force_str
+
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .forms import UserProfileForm  # Ensure you import the form
 import logging
 from django.shortcuts import render, redirect
@@ -69,7 +77,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                     candidate = winner.candidate
                     election_winners.append({
                         'name': candidate.full_name,
-                        'email': candidate.email,
                         'image': candidate.image.url if candidate.image else None,
                         'election': election.election_type
                     })
@@ -242,7 +249,6 @@ class ProfileView(LoginRequiredMixin, TemplateView):
         return context
 
 
-
 class EditProfileView(LoginRequiredMixin, UpdateView):
     """Allows users to edit their profile."""
     model = User
@@ -254,14 +260,130 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
+        # Check if a file is uploaded
+        uploaded_file = self.request.FILES.get('profile_pic')
+        if uploaded_file:
+            print("Uploaded file:", uploaded_file)
+
+        # Save the form and provide success message
+        response = super().form_valid(form)
         messages.success(
             self.request, 'Your profile has been updated successfully!')
         logger.info(
             f"User {self.request.user.email} successfully updated their profile.")
-        return super().form_valid(form)
+        return response
 
     def form_invalid(self, form):
+        # Provide error message and log the issue
         messages.error(
             self.request, 'Error updating your profile. Please try again.')
-        logger.warning(f"User {self.request.user.email} encountered an error while updating their profile.")
+        logger.warning(f"User {
+                       self.request.user.email} encountered an error while updating their profile.")
         return super().form_invalid(form)
+
+# Reset Passwordfrom django.shortcuts import render, redirect
+
+
+def password_reset_request(request):
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+
+            try:
+                user = User.objects.get(email=email)
+                # Create or refresh token
+                token, created = PasswordResetToken.objects.get_or_create(
+                    user=user)
+                token.token = token.generate_token()  # Custom token generator
+                token.is_used = False  # Reset the token usage
+                token.save()
+
+                # Generate the reset link
+                reset_link = request.build_absolute_uri(
+                    f"/user/reset-password/{urlsafe_base64_encode(force_bytes(user.pk))}/{token.token}/")
+                # Print the URL for debugging
+                print(f"Generated reset link: {reset_link}")
+                # Prepare the email
+                subject = "Password Reset Request"
+                body = render_to_string('emails/password_reset_email.html', {
+                    'user': user,
+                    'reset_link': reset_link,
+                })
+
+                # Send the reset email
+                # Assuming this function sends email
+                reset_password(email, subject, body)
+                
+                return redirect('password_reset_done')
+
+                
+            except User.DoesNotExist:
+                messages.error(
+                    request, 'No user with this email address found.')
+            except Exception as e:
+                print(f"Exception: {e}")
+
+                messages.error(
+                    request, 'Error occurred while sending the email. Please try again later.')
+            return redirect('password_reset_request')
+    else:
+        form = PasswordResetRequestForm()
+    return render(request, 'pass/password_reset_request.html', {'form': form})
+
+
+def password_reset(request, uidb64, token):
+    print(f"Received UID: {uidb64}")
+    print(f"Received Token: {token}")
+    try:
+        # Decode user ID from URL and get the user object
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        print(f"Decoded UID: {uid}")  # Debug statement
+
+        user = User.objects.get(pk=uid)
+
+        # Retrieve and validate the token
+        token_obj = PasswordResetToken.objects.get(user=user, token=token, is_used=False)
+
+
+        # Check if the token is expired
+        if token_obj.is_expired():
+            messages.error(request, 'The reset link has expired.')
+            return redirect('password_reset_request')
+
+    except (User.DoesNotExist, PasswordResetToken.DoesNotExist):
+        messages.error(request, 'Invalid reset link or token.')
+        return redirect('password_reset_request')
+
+    if request.method == 'POST':
+        form = SetNewPasswordForm(user=user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            token_obj.is_used = True  # Mark the token as used
+            token_obj.save()
+            
+            # Send confirmation email
+            subject = "Password Reset Successful"
+            body = render_to_string('emails/password_reset_email_complete.html', {
+                'user': user,
+                'fullname': user.full_name,
+            })
+            send_password_reset_confirmation_email(user.email, subject, body)
+
+            return redirect('password_reset_complete')
+    else:
+        form = SetNewPasswordForm(user=user)
+
+    return render(request, 'pass/password_reset.html', {'form': form})
+
+
+def password_reset_done(request):
+    return render(request, 'pass/password_reset_done.html')
+
+
+def password_reset_complete(request):
+    return render(request, 'pass/password_reset_complete.html')
+
+
+def password_reset_error(request):
+    return render(request, 'pass/password_reset_error.html')
