@@ -22,12 +22,10 @@ def send_welcome_mail(instance, created, **kwargs):
                 subject="Welcome to FCFMT Voting System",
                 body=body
             )
-            print(f"Signup email sent to student {
-                  instance.matriculation_number}")
+            print(f"Signup email sent to student { instance.matriculation_number}")
 
         elif 'admin' in instance.user_type:
-            body = render_to_string('emails/auth/admin_welcome_email.html', {
-                'full_name': instance.full_name
+            body = render_to_string('emails/auth/admin_welcome_email.html', { 'full_name': instance.full_name
             })
             Signup_confirmation(
                 email=instance.email,
