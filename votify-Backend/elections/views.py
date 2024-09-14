@@ -151,4 +151,4 @@ def get_candidate_position(candidate):
 
 def candidates_page(request):
     elections = Election.objects.all()
-    return render(request, 'candidates.html', {'elections': elections})
+    return render(request, 'candidates_page.html', {'elections': elections})
