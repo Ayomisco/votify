@@ -277,8 +277,7 @@ class EditProfileView(LoginRequiredMixin, UpdateView):
         # Provide error message and log the issue
         messages.error(
             self.request, 'Error updating your profile. Please try again.')
-        logger.warning(f"User {
-                       self.request.user.email} encountered an error while updating their profile.")
+        logger.warning(f"User {self.request.user.email} encountered an error while updating their profile.")
         return super().form_invalid(form)
 
 # Reset Passwordfrom django.shortcuts import render, redirect
