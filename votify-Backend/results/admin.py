@@ -1,6 +1,8 @@
+
+from django.contrib import admin
+'''
 from django.utils.html import format_html
 from elections.models import Candidate
-from django.contrib import admin
 from django import forms
 from django.utils import timezone
 from .models import Winner, Result
@@ -85,3 +87,4 @@ class WinnerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Winner, WinnerAdmin)
+'''
