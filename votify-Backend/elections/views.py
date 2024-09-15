@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, JsonResponse
 from .models import Election, Candidate, Vote
 from django.db.models import Count
+from django.db import transaction
 
 
 def election_list(request):
@@ -66,29 +67,34 @@ def voting_page(request, election_id):
 def vote(request, election_id, candidate_id):
     """
     View to handle voting for a candidate in a specific election.
-    Creates a vote if the user has not voted yet and the election is active.
+    Ensures atomic transaction to avoid race conditions.
     """
     candidate = get_object_or_404(Candidate, id=candidate_id)
     election = get_object_or_404(Election, id=election_id)
 
     if request.method == "POST":
         if election.start_date <= timezone.now() <= election.end_date:
-            vote, created = Vote.objects.get_or_create(
-                user=request.user,
-                election=election,
-                defaults={'candidate': candidate}
-            )
-            if created:
-                candidate.votes_count += 1
-                candidate.save()
-                messages.success(
-                    request, "Your vote has been successfully recorded.")
-            else:
-                messages.error(
-                    request, "You have already voted in this election.")
+            with transaction.atomic():
+                vote, created = Vote.objects.get_or_create(
+                    user=request.user,
+                    election=election,
+                    defaults={'candidate': candidate}
+                )
+                if created:
+                    # Use F-expression to prevent race conditions
+                    candidate.votes_count = F('votes_count') + 1
+                    candidate.save(update_fields=['votes_count'])
+                    messages.success(
+                        request, "Your vote has been successfully recorded."
+                    )
+                else:
+                    messages.error(
+                        request, "You have already voted in this election."
+                    )
         else:
             messages.error(
-                request, "Voting is not allowed outside of the election period.")
+                request, "Voting is not allowed outside of the election period."
+            )
 
     return redirect('voting_page', election_id=election.id)
 

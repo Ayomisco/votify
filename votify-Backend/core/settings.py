@@ -151,3 +151,14 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Logging configuration
+'''
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.useplunk.com'
+EMAIL_PORT = 465  # You can also use 587, but 465 is for SSL
+EMAIL_USE_SSL = True  # Use SSL (for port 465) or TLS (for port 587)
+EMAIL_USE_TLS = False  # This should be False if you're using SSL
+EMAIL_HOST_USER = 'plunk'
+EMAIL_HOST_PASSWORD = 'sk_5984bb426f84c19ca52aee451713999f6047286e65b92a15'  # Replace with your actual Plunk SMTP password
+DEFAULT_FROM_EMAIL = 'noreply@yourdomain.com'  # Replace with your sender email
+'''

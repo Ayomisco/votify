@@ -62,8 +62,8 @@ class UserAdmin(BaseUserAdmin):
         return super().has_delete_permission(request, obj)
 
 
-admin.site.site_header = "Votify Admin Portal"
-admin.site.site_title = "Votify Admin Portal"
-admin.site.index_title = "Welcome to Votify Admin Portal"
+admin.site.site_header = "FCFMT Voting System Admin Portal"
+admin.site.site_title = "FCFMT Voting System Admin Portal"
+admin.site.index_title = "Welcome to FCFMT Voting System Admin Portal"
 
 admin.site.register(User, UserAdmin)

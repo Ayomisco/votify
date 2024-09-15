@@ -83,6 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     LABOUR_RELATIONS = 'Industrial and Labour Relations'
     OCEANOGRAPHY = 'Oceanography and Fisheries Science'
     HYDROLOGY = 'Hydrology and Water Resources Management'
+    MARITIME_TRANSPORT_AND_BUSSINESS_MANAGEMENT = 'MARITIME TRANSPORT AND BUSSINESS MANAGEMENT'
 
     DEPARTMENT_CHOICES = [
         (MARINE_ENGINEERING, 'Marine Engineering'),
@@ -95,6 +96,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         (LABOUR_RELATIONS, 'Industrial and Labour Relations'),
         (OCEANOGRAPHY, 'Oceanography and Fisheries Science'),
         (HYDROLOGY, 'Hydrology and Water Resources Management'),
+        (MARITIME_TRANSPORT_AND_BUSSINESS_MANAGEMENT, 'MARITIME TRANSPORT AND BUSSINESS MANAGEMENT')
     ]
 
 
