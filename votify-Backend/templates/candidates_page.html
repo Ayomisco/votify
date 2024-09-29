@@ -14,7 +14,7 @@
     <div class="row justify-content-center mb-4">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="electionFilter">Filter by Election:</label>
+                <label for="electionFilter">Filter by Active Election:</label>
                 <select id="electionFilter" class="form-control shadow-sm">
                     {% for election in elections %}
                         <option value="{{ election.election_type }}">{{ election.election_type }}</option>

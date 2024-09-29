@@ -104,6 +104,9 @@ class Candidate(models.Model):
              'Oceanography and Fisheries Science'),
             ('Hydrology and Water Resources Management',
              'Hydrology and Water Resources Management'),
+            ('MARITIME TRANSPORT AND BUSSINESS MANAGEMENT',
+             'MARITIME TRANSPORT AND BUSSINESS MANAGEMENT')
+
         ],
         null=True,
         blank=True

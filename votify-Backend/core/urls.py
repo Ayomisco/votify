@@ -27,14 +27,20 @@ handler404 = 'users.views.custom_404'
 handler500 = 'users.views.custom_500'
 
 urlpatterns = [
-    path('user/', include('users.urls')),
-    path('', include('elections.urls')),
-
     path('', IndexView.as_view(), name='index'),
+    path('user/', include('users.urls')),
+
+    
     
 
     path('dashboard/', DashboardView.as_view(), name='dashboard'),
 
     path('admin/', include('users.admin_urls')),  # Include custom admin URLs
 
-] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    path('', include('elections.urls')),
+
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

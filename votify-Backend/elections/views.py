@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from .models import Election, Candidate, Vote
 from django.db.models import Count
 from django.db import transaction
+from django.db.models import F
 
 
 def election_list(request):
@@ -155,6 +156,14 @@ def get_candidate_position(candidate):
     else:
         return f'{position}th Place'
 
+
+
 def candidates_page(request):
-    elections = Election.objects.all()
+    # Get the current date and time
+    current_time = timezone.now()
+
+    # Filter for active elections
+    elections = Election.objects.filter(
+        start_date__lte=current_time, end_date__gte=current_time)
+
     return render(request, 'candidates_page.html', {'elections': elections})

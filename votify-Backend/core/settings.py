@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ma*@*@*8#v3-(!i3x&55n%%ye-o7q0^5xg31m()izvrqb2u!@%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['votify.pythonanywhere.com', 'votify-jf4o.onrender.com',
                  'fcfmt-voting-system.koyeb.app', '127.0.0.1', '.vercel.app']
