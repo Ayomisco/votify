@@ -76,15 +76,17 @@ def vote(request, election_id, candidate_id):
     if request.method == "POST":
         if election.start_date <= timezone.now() <= election.end_date:
             with transaction.atomic():
+                # Check if the user has already voted for this election
                 vote, created = Vote.objects.get_or_create(
                     user=request.user,
                     election=election,
                     defaults={'candidate': candidate}
                 )
+
                 if created:
-                    # Use F-expression to prevent race conditions
-                    candidate.votes_count = F('votes_count') + 1
-                    candidate.save(update_fields=['votes_count'])
+                    # Only increment votes if a new vote was created
+                    Candidate.objects.filter(id=candidate_id).update(
+                        votes_count=F('votes_count') + 1)
                     messages.success(
                         request, "Your vote has been successfully recorded."
                     )
